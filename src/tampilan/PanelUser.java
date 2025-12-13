@@ -4,6 +4,12 @@
  */
 package tampilan;
 
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import kelas.koneksi;
+import kelas.KelasUser;
+import frame.popUpTambahUser;
+
 /**
  *
  * @author Sukma Nur
@@ -15,6 +21,13 @@ public class PanelUser extends javax.swing.JPanel {
      */
     public PanelUser() {
         initComponents();
+        load_table();
+    }
+
+    public void load_table() {
+        KelasUser user = new KelasUser();
+        DefaultTableModel model = user.loadtable();
+        jtabeluser.setModel(model);
     }
 
     /**
@@ -32,7 +45,7 @@ public class PanelUser extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtabeluser = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(950, 650));
 
@@ -60,7 +73,7 @@ public class PanelUser extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(250, 240, 230));
         jLabel2.setText("Tabel Data User");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtabeluser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -71,7 +84,12 @@ public class PanelUser extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jtabeluser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtabeluserMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtabeluser);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -132,13 +150,29 @@ public class PanelUser extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
+        popUpTambahUser popup = new popUpTambahUser(this);
+        popup.setVisible(true);
+        popup.tampilanTambah();
     }//GEN-LAST:event_bTambahActionPerformed
+
+    private void jtabeluserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtabeluserMouseClicked
+        // TODO add your handling code here:
+        int baris = jtabeluser.rowAtPoint(evt.getPoint());
+        String username = jtabeluser.getValueAt(baris, 1).toString();
+        String fullname = jtabeluser.getValueAt(baris, 2).toString();
+
+        popUpTambahUser tambahuser = new popUpTambahUser(this);
+        tambahuser.setVisible(true);
+        tambahuser.tampilData(username, fullname);
+        tambahuser.tampilanEdit();
+
+    }//GEN-LAST:event_jtabeluserMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -148,6 +182,6 @@ public class PanelUser extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jtabeluser;
     // End of variables declaration//GEN-END:variables
 }

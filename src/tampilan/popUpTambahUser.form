@@ -149,6 +149,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Simpan"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jSimpanActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jHapus">
           <Properties>
@@ -160,6 +163,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Hapus"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jHapusActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jUbah">
           <Properties>
