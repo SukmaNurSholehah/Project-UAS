@@ -4,6 +4,17 @@
  */
 package tampilan;
 
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.io.File;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import kelas.pelatih;
+
 /**
  *
  * @author Sukma Nur
@@ -13,8 +24,92 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
     /**
      * Creates new form popUpTambahPelatih
      */
-    public popUpTambahPelatih() {
+    private PanelPelatih pnPelatih;
+
+    public popUpTambahPelatih(PanelPelatih pPelatih) {
         initComponents();
+        this.pnPelatih = pPelatih;
+    }
+
+    private void reset() {
+        tIDPelatih.setText("");
+        tNamaPelatih.setText("");
+        tKontak.setText("");
+        cSabuk.setSelectedIndex(0);
+        lbSertifikat.setText("sertifikat");
+        pathSertif.setText("path sertifikat");
+    }
+
+    private String konversiIDSabuk(String namaSabuk) {
+        String id = "";
+        try {
+            pelatih plt = new pelatih();
+            id = plt.konversIDSabuk(namaSabuk);
+        } catch (Exception e) {
+            System.out.println(e);
+            return "";
+        }
+        return id;
+    }
+
+    public void tampilanTambah() {
+        bUbah.setVisible(false);
+        bHapus.setVisible(false);
+    }
+
+    public void tampilanEdit() {
+        bSimpan.setVisible(false);
+    }
+
+    public void tampilData(String id, String nama, String kontak, String sabuk) {
+        tIDPelatih.setText(id);
+        tNamaPelatih.setText(nama);
+        tKontak.setText(kontak);
+        cSabuk.setSelectedItem(sabuk);
+
+        pelatih plt = new pelatih();
+        plt.showSertif(id, lbSertifikat, pathSertif);
+    }
+
+    private String Sertif(String filePath) {
+        // Variabel untuk menyimpan path file foto tujuan
+        String foto = null;
+
+        // Mengecek apakah ada path file foto yang dipilih
+        if (filePath.length() != 0) {
+            try {
+                // Menyimpan path sumber file
+                String sourcePath = filePath;
+                File sourceFile = new File(sourcePath);
+
+                // Menentukan folder tujuan untuk menyimpan foto
+                String destinationFolderPath = "src/foto/";
+                File destinationFolder = new File(destinationFolderPath);
+
+                // Jika folder tujuan belum ada, buat folder tersebut
+                if (!destinationFolder.exists()) {
+                    destinationFolder.mkdir();
+                }
+
+                String extension = sourcePath.substring(sourcePath.lastIndexOf('.') + 1);
+
+                String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                String destinationFileName = "foto-" + timestamp + "." + extension;
+
+                File destinationFile = new File(destinationFolderPath + destinationFileName);
+
+                Files.copy(sourceFile.toPath(), destinationFile.toPath());
+
+                foto = destinationFile.getPath();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Gagal upload file: " + e.getMessage());
+                System.out.println(e);
+            }
+        } else {
+            foto = null;
+        }
+        return foto;
     }
 
     /**
@@ -32,13 +127,15 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         tIDPelatih = new javax.swing.JTextField();
-        tSabuk = new javax.swing.JTextField();
         tKontak = new javax.swing.JTextField();
         lbSertifikat = new javax.swing.JLabel();
         pathSertif = new javax.swing.JLabel();
         bSimpan = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
+        cSabuk = new javax.swing.JComboBox<>();
+        tNamaPelatih = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,14 +155,17 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
 
         tIDPelatih.setPreferredSize(new java.awt.Dimension(70, 35));
 
-        tSabuk.setPreferredSize(new java.awt.Dimension(70, 35));
-
         tKontak.setPreferredSize(new java.awt.Dimension(70, 35));
 
         lbSertifikat.setForeground(new java.awt.Color(181, 181, 181));
         lbSertifikat.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbSertifikat.setText("Sertifikat");
         lbSertifikat.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lbSertifikat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbSertifikatMouseClicked(evt);
+            }
+        });
 
         pathSertif.setForeground(new java.awt.Color(181, 181, 181));
         pathSertif.setText("Path Sertifikat");
@@ -84,49 +184,70 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
         bUbah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bUbah.setForeground(new java.awt.Color(255, 255, 255));
         bUbah.setText("Ubah");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
 
         bHapus.setBackground(new java.awt.Color(204, 0, 0));
         bHapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bHapus.setForeground(new java.awt.Color(255, 255, 255));
         bHapus.setText("Hapus");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
+
+        cSabuk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("Nama Pelatih");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tIDPelatih, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(bSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(bUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(bHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbSertifikat, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tSabuk, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tKontak, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(55, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pathSertif, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pathSertif, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5)
+                                        .addComponent(tKontak, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                        .addComponent(cSabuk, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lbSertifikat, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                        .addComponent(tNamaPelatih)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(bSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(bUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(bHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(tIDPelatih, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,14 +258,18 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tIDPelatih, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNamaPelatih, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tKontak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tSabuk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cSabuk, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbSertifikat, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,7 +279,7 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
                     .addComponent(bSimpan)
                     .addComponent(bUbah)
                     .addComponent(bHapus))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -172,8 +297,83 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
-        // TODO add your handling code here:
+        pelatih plt = new pelatih();
+
+        plt.setIdPelatih(tIDPelatih.getText());
+        plt.setNamaPelatih(tNamaPelatih.getText());
+        plt.setNoHp(tKontak.getText());
+        plt.setIdSabuk(konversiIDSabuk(cSabuk.getSelectedItem().toString()));
+        plt.setSertifikat(Sertif(pathSertif.getText()));
+
+        plt.addPelatih();
+        // setelah berhasil tambah, refresh tabel di frame utama
+        if (pnPelatih != null) {
+            pnPelatih.loadTablePelatih();// panggil fungsi reload
+        }
+        reset();
+        dispose();
     }//GEN-LAST:event_bSimpanActionPerformed
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        pelatih plt = new pelatih();
+
+        plt.setIdPelatih(tIDPelatih.getText());
+        plt.setNamaPelatih(tNamaPelatih.getText());
+        plt.setNoHp(tKontak.getText());
+        plt.setIdSabuk(konversiIDSabuk(cSabuk.getSelectedItem().toString()));
+        plt.setSertifikat(Sertif(pathSertif.getText()));
+
+        plt.updatePelatih();
+        // setelah berhasil tambah, refresh tabel di frame utama
+        if (pnPelatih != null) {
+            pnPelatih.loadTablePelatih();// panggil fungsi reload
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        pelatih plt = new pelatih();
+        plt.setIdPelatih(tIDPelatih.getText());
+        plt.deletePelatih();
+        // setelah berhasil tambah, refresh tabel di frame utama
+        if (pnPelatih != null) {
+            pnPelatih.loadTablePelatih();// panggil fungsi reload
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_bHapusActionPerformed
+
+    private void lbSertifikatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSertifikatMouseClicked
+        try {
+            JFileChooser ch = new JFileChooser();
+            int rs = ch.showOpenDialog(null);
+            if (rs == JFileChooser.APPROVE_OPTION) {
+                File file = ch.getSelectedFile();
+                if (file != null) {
+                    ImageIcon icon = new ImageIcon(file.toString());
+                    int width = 442;
+                    int height = 197;
+
+                    Image img = icon.getImage().getScaledInstance(
+                            width,
+                            height,
+                            Image.SCALE_SMOOTH);
+
+                    ImageIcon ic = new ImageIcon(img);
+                    lbSertifikat.setText(null);
+                    lbSertifikat.setIcon(ic);
+
+                    pathSertif.setText(file.getAbsolutePath());
+                }
+            } else {
+                System.out.println("Pemilihan file dibatalkan oleh pengguna.");
+            }
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Error Upload: " + e.getMessage());
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_lbSertifikatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -206,19 +406,21 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpTambahPelatih().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUpTambahPelatih().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bHapus;
     private javax.swing.JButton bSimpan;
     private javax.swing.JButton bUbah;
+    private javax.swing.JComboBox<String> cSabuk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
@@ -226,6 +428,6 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
     private javax.swing.JLabel pathSertif;
     private javax.swing.JTextField tIDPelatih;
     private javax.swing.JTextField tKontak;
-    private javax.swing.JTextField tSabuk;
+    private javax.swing.JTextField tNamaPelatih;
     // End of variables declaration//GEN-END:variables
 }

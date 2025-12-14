@@ -7,27 +7,23 @@ package tampilan;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import kelas.registrasi;
 import kelas.ujian;
 
 /**
  *
  * @author HP
  */
-public class popUpTambahKegiatan extends javax.swing.JFrame {
+public class poUpTambahDataRegistrasi extends javax.swing.JFrame {
 
     /**
-     * Creates new form popUp_tambah_event
+     * Creates new form poUpTambahDataRegistrasi
      */
-    private panelUjian pUjian;
+    private panelRegistrasi pRegistrasi;
 
-    public popUpTambahKegiatan(panelUjian pUjian) {
+    public poUpTambahDataRegistrasi(panelRegistrasi pRegis) {
         initComponents();
-        this.pUjian = pUjian;
-
-        ujian uj = new ujian();
-        uj.autoID(t_idUjian);
-        uj.comboPelatih(c_penguji);
-        reset();
+        this.pRegistrasi = pRegis;
     }
 
     void reset() {
@@ -35,14 +31,14 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         t_tgl_mulai.setCalendar(null);
         t_tgl_selesai.setCalendar(null);
         t_lokasi.setText(null);
-        c_penguji.setSelectedItem(null);
+        cMainEvent.setSelectedIndex(0);
     }
 
-    String konversiID(String namaPelatih) {
+    String konversiID(String namaUjian) {
         String id = "";
         try {
             ujian uj = new ujian();
-            id = uj.konversIDpelatih(namaPelatih);
+            id = uj.getIdKegiatanByName(namaUjian);
         } catch (Exception e) {
             System.out.println(e);
             return "";
@@ -50,20 +46,20 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         return id;
     }
 
-    public void tampilan_tambah_ujian() {
+    public void tampilan_tambah_regist() {
         b_ubah.setVisible(false);
         b_hapus.setVisible(false);
 //        tentukanJenis();
     }
 
-    public void tampilan_edit_ujian() {
+    public void tampilan_edit_regist() {
         b_simpan.setVisible(false);
     }
 
     public void tampil_data(String id, String nama, String tglMulai, String tglAkhir,
-            String lokasi, String pelatih) {
+            String lokasi, String ujian) {
 
-        t_idUjian.setText(id);
+        t_idregist.setText(id);
         t_nama.setText(nama);
 
         // Format tanggal sesuai yang disimpan di database
@@ -92,7 +88,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         }
 
         t_lokasi.setText(lokasi);
-        c_penguji.setSelectedItem(pelatih);
+        cMainEvent.setSelectedItem(ujian);
     }
 
     /**
@@ -105,29 +101,32 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        t_idregist = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        t_nama = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         t_tgl_mulai = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
+        t_tgl_selesai = new com.toedter.calendar.JDateChooser();
+        jLabel7 = new javax.swing.JLabel();
         t_lokasi = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        c_penguji = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        t_keterangan = new javax.swing.JTextArea();
+        jLabel8 = new javax.swing.JLabel();
+        cMainEvent = new javax.swing.JComboBox<>();
         b_simpan = new javax.swing.JButton();
         b_ubah = new javax.swing.JButton();
         b_hapus = new javax.swing.JButton();
-        t_idUjian = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        t_nama = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        t_tgl_selesai = new com.toedter.calendar.JDateChooser();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setText("ID ");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setText("Nama Kegiatan ");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Tanggal Mulai");
@@ -135,21 +134,17 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Tanggal Selesai");
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setText("Lokasi");
+
         t_lokasi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_lokasiActionPerformed(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Penguji");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Keterangan");
-
-        t_keterangan.setColumns(20);
-        t_keterangan.setRows(5);
-        jScrollPane1.setViewportView(t_keterangan);
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setText("Kegiatan Utama");
 
         b_simpan.setBackground(new java.awt.Color(0, 204, 0));
         b_simpan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -181,17 +176,8 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("ID ");
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Nama Kegiatan ");
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setText("Lokasi");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setText("KEGIATAN");
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setText("REGISTRASI");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -200,50 +186,49 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(244, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(b_simpan)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(b_ubah)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(b_hapus))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(t_lokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(t_tgl_mulai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(t_tgl_selesai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(c_penguji, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(t_nama, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(t_idUjian, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 65, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(324, 324, 324))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(cMainEvent, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(t_tgl_selesai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(t_tgl_mulai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(t_nama, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(t_idregist, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(t_lokasi, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(60, 60, 60))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addGap(7, 7, 7)
+                .addGap(19, 19, 19)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(t_idUjian, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(t_idregist, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(t_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -251,28 +236,24 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(t_tgl_mulai, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(t_tgl_selesai, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(3, 3, 3)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(t_lokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(c_penguji, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(cMainEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_simpan)
                     .addComponent(b_ubah)
                     .addComponent(b_hapus))
-                .addContainerGap())
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -294,9 +275,9 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
     }//GEN-LAST:event_t_lokasiActionPerformed
 
     private void b_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_simpanActionPerformed
-        ujian uj = new ujian();
-        uj.setID_kegiatan(t_idUjian.getText());
-        uj.setNama_kegiatan(t_nama.getText());
+        registrasi regis = new registrasi();
+        regis.setIdRegitrasi(t_idregist.getText());
+        regis.setNamaRegistrasi(t_nama.getText());
 
         //ambil tgl mulai dari komponen kalender
         Date tglMulaiDate = t_tgl_mulai.getDate();
@@ -305,7 +286,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             // Mengubah tanggal lahir menjadi format "yyyy-MM-dd"
             tglMulai = new SimpleDateFormat("yyyy-MM-dd").format(tglMulaiDate);
         }
-        uj.setTgl_mulai(tglMulai);
+        regis.setTglmulai(tglMulai);
 
         //ambil tgl mulai dari komponen kalender
         Date tglAkhirDate = t_tgl_selesai.getDate();
@@ -314,24 +295,25 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             // Mengubah tanggal lahir menjadi format "yyyy-MM-dd"
             tglAkhir = new SimpleDateFormat("yyyy-MM-dd").format(tglAkhirDate);
         }
-        uj.setTgl_selesai(tglAkhir);
+        regis.setTglSelesai(tglAkhir);
 
-        uj.setLokasi(t_lokasi.getText());
-        uj.setPelatih(konversiID(c_penguji.getSelectedItem().toString()));
+        regis.setLokasi(t_lokasi.getText());
+        regis.setParentUjian(konversiID(cMainEvent.getSelectedItem().toString()));
+//        event.setiD_user("US01");
 
-        uj.tambah_ujian();
+        regis.tambahRegis();
         // setelah berhasil tambah, refresh tabel di frame utama
-        if (pUjian != null) {
-            pUjian.load_table_ujian();// panggil fungsi reload
+        if (pRegistrasi != null) {
+            pRegistrasi.load_table_regis();// panggil fungsi reload
         }
         reset();
         dispose();
     }//GEN-LAST:event_b_simpanActionPerformed
 
     private void b_ubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_ubahActionPerformed
-        ujian uj = new ujian();
-        uj.setID_kegiatan(t_idUjian.getText());
-        uj.setNama_kegiatan(t_nama.getText());
+        registrasi regis = new registrasi();
+        regis.setIdRegitrasi(t_idregist.getText());
+        regis.setNamaRegistrasi(t_nama.getText());
 
         //ambil tgl mulai dari komponen kalender
         Date tglMulaiDate = t_tgl_mulai.getDate();
@@ -340,7 +322,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             // Mengubah tanggal lahir menjadi format "yyyy-MM-dd"
             tglMulai = new SimpleDateFormat("yyyy-MM-dd").format(tglMulaiDate);
         }
-        uj.setTgl_mulai(tglMulai);
+        regis.setTglmulai(tglMulai);
 
         //ambil tgl mulai dari komponen kalender
         Date tglAkhirDate = t_tgl_selesai.getDate();
@@ -349,29 +331,25 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
             // Mengubah tanggal lahir menjadi format "yyyy-MM-dd"
             tglAkhir = new SimpleDateFormat("yyyy-MM-dd").format(tglAkhirDate);
         }
-        uj.setTgl_selesai(tglAkhir);
+        regis.setTglSelesai(tglAkhir);
 
-        uj.setLokasi(t_lokasi.getText());
-        uj.setPelatih(konversiID(c_penguji.getSelectedItem().toString()));
+        regis.setLokasi(t_lokasi.getText());
+        regis.setParentUjian(konversiID(cMainEvent.getSelectedItem().toString()));
+//        event.setiD_user("US01");
 
-        uj.ubah_ujian();
+        regis.ubahRegis();
         // setelah berhasil tambah, refresh tabel di frame utama
-        if (pUjian != null) {
-            pUjian.load_table_ujian();// panggil fungsi reload
+        if (pRegistrasi != null) {
+            pRegistrasi.load_table_regis();// panggil fungsi reload
         }
         reset();
         dispose();
     }//GEN-LAST:event_b_ubahActionPerformed
 
     private void b_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_hapusActionPerformed
-        ujian uj = new ujian();
-        uj.setID_kegiatan(t_idUjian.getText());
-        uj.hapus_ujian();
-        // setelah berhasil tambah, refresh tabel di frame utama
-        if (pUjian != null) {
-            pUjian.load_table_ujian();// panggil fungsi reload
-        }
-        dispose();
+        registrasi regis = new registrasi();
+        regis.setIdRegitrasi(t_idregist.getText());
+        regis.hapusRegis();
     }//GEN-LAST:event_b_hapusActionPerformed
 
     /**
@@ -391,72 +369,38 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(popUpTambahKegiatan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(poUpTambahDataRegistrasi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(popUpTambahKegiatan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(poUpTambahDataRegistrasi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(popUpTambahKegiatan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(poUpTambahDataRegistrasi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(popUpTambahKegiatan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(poUpTambahDataRegistrasi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new popUpTambahKegiatan().setVisible(true);
+//                new poUpTambahDataRegistrasi().setVisible(true);
 //            }
-//       });
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_hapus;
     private javax.swing.JButton b_simpan;
     private javax.swing.JButton b_ubah;
-    private javax.swing.JComboBox<String> c_penguji;
+    private javax.swing.JComboBox<String> cMainEvent;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField t_idUjian;
-    private javax.swing.JTextArea t_keterangan;
+    private javax.swing.JTextField t_idregist;
     private javax.swing.JTextField t_lokasi;
     private javax.swing.JTextField t_nama;
     private com.toedter.calendar.JDateChooser t_tgl_mulai;

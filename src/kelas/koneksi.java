@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * @author Sukma Nur
  */
 public class koneksi {
-     private Connection mysqlconfig;
-    public Connection configDB(){
+     private  Connection mysqlconfig;
+    public  Connection configDB(){
         try {
             String url = "jdbc:mysql://localhost:3306/ampporsigal";
             String user = "root";

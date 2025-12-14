@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tampilan;
-
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import kelas.registrasi;
 /**
  *
  * @author HP
@@ -13,8 +18,51 @@ public class popUpCariAnggota extends javax.swing.JFrame {
     /**
      * Creates new form popUp_cari_anggota
      */
-    public popUpCariAnggota() {
+    private popUpTambahRegistrasi popupTambahRegis;
+    public popUpCariAnggota(popUpTambahRegistrasi popupTambahRegis) {
         initComponents();
+        this.popupTambahRegis = popupTambahRegis;
+        load_table_anggota();
+    }
+    
+    private void load_table_anggota() {
+        registrasi regis = new registrasi();
+        DefaultTableModel model = regis.tabelAnggota();
+        table_data_anggota.setModel(model);
+        atur_table();
+    }
+    
+    void atur_table() {
+        // Warna lembut untuk header
+        table_data_anggota.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        table_data_anggota.getTableHeader().setForeground(Color.BLACK);
+        table_data_anggota.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        table_data_anggota.setBackground(Color.WHITE);
+        table_data_anggota.setForeground(Color.BLACK);
+        table_data_anggota.setGridColor(Color.LIGHT_GRAY);
+        table_data_anggota.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        table_data_anggota.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < table_data_anggota.getColumnCount(); i++) {
+            table_data_anggota.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) table_data_anggota.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        table_data_anggota.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        table_data_anggota.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Anggota
+        table_data_anggota.getColumnModel().getColumn(2).setPreferredWidth(150); // Nama Anggota
+        table_data_anggota.getColumnModel().getColumn(3).setPreferredWidth(100); // Status
     }
 
     /**
@@ -39,7 +87,21 @@ public class popUpCariAnggota extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("CARI DATA ANGGOTA");
 
-        t_cari_nama.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Nama Anggota"));
+        t_cari_nama.setText("Cari nama anggota");
+        t_cari_nama.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        t_cari_nama.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_cari_namaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                t_cari_namaFocusLost(evt);
+            }
+        });
+        t_cari_nama.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                t_cari_namaKeyReleased(evt);
+            }
+        });
 
         table_data_anggota.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -52,6 +114,11 @@ public class popUpCariAnggota extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        table_data_anggota.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_data_anggotaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_data_anggota);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -72,11 +139,11 @@ public class popUpCariAnggota extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(t_cari_nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(t_cari_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -92,6 +159,45 @@ public class popUpCariAnggota extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void t_cari_namaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_cari_namaKeyReleased
+     String kataKunci = t_cari_nama.getText();
+     registrasi regis = new registrasi();
+     DefaultTableModel model = regis.filterTableAnggota(kataKunci);
+     table_data_anggota.setModel(model);
+     atur_table();
+    }//GEN-LAST:event_t_cari_namaKeyReleased
+
+    private void table_data_anggotaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_data_anggotaMouseClicked
+        int barisdipilih = table_data_anggota.rowAtPoint(evt.getPoint());
+        
+        if (barisdipilih >= 0) {
+            String id = table_data_anggota.getValueAt(barisdipilih, 1).toString();
+            String nama = table_data_anggota.getValueAt(barisdipilih, 2).toString();
+            String status = table_data_anggota.getValueAt(barisdipilih, 3).toString();
+            
+          
+           popupTambahRegis.tampilData(id, nama, status);
+           popupTambahRegis.setVisible(true);
+           this.dispose();
+        }
+    }//GEN-LAST:event_table_data_anggotaMouseClicked
+
+    private void t_cari_namaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_cari_namaFocusGained
+      String placeholder = "Nama Anggota";
+        if (t_cari_nama.getText().equals(placeholder)) {
+            t_cari_nama.setText("");
+            t_cari_nama.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_t_cari_namaFocusGained
+
+    private void t_cari_namaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_cari_namaFocusLost
+       String placeholder = "Cari Nama Anggota";
+        if (t_cari_nama.getText().equals(placeholder)) {
+            t_cari_nama.setText("");
+            t_cari_nama.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_t_cari_namaFocusLost
 
     /**
      * @param args the command line arguments
@@ -152,12 +258,12 @@ public class popUpCariAnggota extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpCariAnggota().setVisible(true);
-            }
-        });
-    }
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUpCariAnggota().setVisible(true);
+//            }
+//        });
+       }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

@@ -4,6 +4,16 @@
  */
 package tampilan;
 
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import kelas.koneksi;
+import kelas.registrasi;
+
 /**
  *
  * @author HP
@@ -13,8 +23,54 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
     /**
      * Creates new form popUp_tambah_registrasi
      */
-    public popUpTambahRegistrasi() {
+    DefaultTableModel modelRegistrasi;
+    ArrayList<String[]> daftarAnggota = new ArrayList<>();
+
+    public popUpTambahRegistrasi(String idRegis) {
         initComponents();
+        setTableModel();
+
+        registrasi regis = new registrasi();
+        regis.autoIDDetail(lbIDdetailRegistrasi);
+        reset();
+    }
+
+    void reset() {
+        t_id.setText(null);
+        t_nama.setText(null);
+        t_status.setText(null);
+    }
+
+    void setTableModel() {
+        modelRegistrasi = new DefaultTableModel(new String[]{
+            "No",
+            "ID Anggota",
+            "Nama Anggota",
+            "Status"},
+                0);
+        table_peserta.setModel(modelRegistrasi);
+    }
+
+    public void tampilData(String id, String nama, String status) {
+        t_id.setText(id);
+        t_nama.setText(nama);
+        t_status.setText(status);
+    }
+
+    public void namaKegiatan(String namaKegiatan) {
+        lbNamaKegiatan.setText(namaKegiatan);
+    }
+
+    String konversiID(String namaRegis) {
+        String id = "";
+        try {
+            registrasi regis = new registrasi();
+            id = regis.konversIDRegis(namaRegis);
+        } catch (Exception e) {
+            System.out.println(e);
+            return "";
+        }
+        return id;
     }
 
     /**
@@ -52,6 +108,11 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         jLabel1.setText("DAFTAR REGISTRASI PESERTA UJIAN PORSIGAL ");
 
         b_cari.setText("Cari Data Anggota");
+        b_cari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cariActionPerformed(evt);
+            }
+        });
 
         t_id.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Anggota"));
 
@@ -92,16 +153,31 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         bAdd.setForeground(new java.awt.Color(255, 255, 255));
         bAdd.setText("Add");
         bAdd.setToolTipText("");
+        bAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAddActionPerformed(evt);
+            }
+        });
 
         bDetail.setBackground(new java.awt.Color(153, 153, 153));
         bDetail.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bDetail.setForeground(new java.awt.Color(255, 255, 255));
         bDetail.setText("Detail");
+        bDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDetailActionPerformed(evt);
+            }
+        });
 
         bBack.setBackground(new java.awt.Color(255, 0, 102));
         bBack.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bBack.setForeground(new java.awt.Color(255, 255, 255));
         bBack.setText("<Back");
+        bBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBackActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("ID Detail Registrasi  :");
 
@@ -204,8 +280,65 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
     }//GEN-LAST:event_t_namaActionPerformed
 
     private void b_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_simpanActionPerformed
-        // TODO add your handling code here:
+        registrasi regis = new registrasi();
+
+        regis.setIdDetailRegistrasi(lbIDdetailRegistrasi.getText());
+        regis.setIdRegitrasi(konversiID(lbNamaKegiatan.getText()));
+
+        boolean status = true;
+        try {
+            for (String[] item : daftarAnggota) {
+                String namaAnggota = item[1];
+
+                regis.konversiIDAnggota(namaAnggota, status);
+            }
+            if (status) {
+                JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data Gagal Disimpan");
+            }
+
+            // 🧹 Reset daftarAnggota agar kosong untuk input berikutnya
+            daftarAnggota.clear();
+
+            // 🧹 Reset tampilan tabel (hapus semua baris)
+            DefaultTableModel model = (DefaultTableModel) table_peserta.getModel();
+            model.setRowCount(0);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_b_simpanActionPerformed
+
+    private void b_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cariActionPerformed
+        new popUpCariAnggota(this).setVisible(true);
+    }//GEN-LAST:event_b_cariActionPerformed
+
+    private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
+        String id = t_id.getText();
+        String nama = t_nama.getText();
+        String status = t_status.getText();
+        daftarAnggota.add(new String[]{
+            id, nama, status
+        });
+        modelRegistrasi.addRow(new Object[]{
+            modelRegistrasi.getRowCount() + 1,
+            id, nama, status
+        });
+        reset();
+    }//GEN-LAST:event_bAddActionPerformed
+
+    private void bDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDetailActionPerformed
+        String idRegis = konversiID(lbNamaKegiatan.getText()); // ambil ID registrasi dari label
+
+        popUpDataRegistrasi detail_regis = new popUpDataRegistrasi(); // kirim ke frame kedua
+        detail_regis.setVisible(true);
+        detail_regis.tampilData(idRegis);
+    }//GEN-LAST:event_bDetailActionPerformed
+
+    private void bBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBackActionPerformed
+        dispose();
+    }//GEN-LAST:event_bBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,11 +399,11 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpTambahRegistrasi().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUpTambahRegistrasi().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

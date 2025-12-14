@@ -4,6 +4,11 @@
  */
 package tampilan;
 
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
+import kelas.laporan;
+import kelas.ujian;
+
 /**
  *
  * @author Sukma Nur
@@ -17,6 +22,42 @@ public class panelUjian extends javax.swing.JPanel {
         initComponents();
     }
 
+    public void load_table_ujian() {
+        ujian uj = new ujian();
+        DefaultTableModel model = uj.showKegiatan();
+        table_ujian.setModel(model);
+        uj.aturTable(table_ujian);
+    }
+
+    private void filterTGL() {
+        Date tglAwal = tStartDate.getDate();
+        Date tglAkhir = tEndDate.getDate();
+
+        // Cek null terlebih dahulu
+        if (tglAwal == null || tglAkhir == null) {
+            return; // hentikan supaya tidak error
+        }
+
+        ujian uj = new ujian();
+        DefaultTableModel model = uj.filterTable(tglAwal, tglAkhir);
+        table_ujian.setModel(model);
+        uj.aturTable(table_ujian);
+    }
+
+    private void setTanggalListener() {
+        tStartDate.addPropertyChangeListener("date", evt -> {
+            if (tStartDate.getDate() != null && tStartDate.getDate() != null) {
+                filterTGL();
+            }
+        });
+
+        tEndDate.addPropertyChangeListener("date", evt -> {
+            if (tEndDate.getDate() != null && tEndDate.getDate() != null) {
+                filterTGL();
+            }
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,24 +68,34 @@ public class panelUjian extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        b_tambah = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table_event = new javax.swing.JTable();
+        table_ujian = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         bExport = new javax.swing.JButton();
+        tStartDate = new com.toedter.calendar.JDateChooser();
+        tEndDate = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        b_reset = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
         jPanel1.setPreferredSize(new java.awt.Dimension(950, 650));
 
-        jButton1.setBackground(new java.awt.Color(0, 204, 51));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setText("Tambah");
+        b_tambah.setBackground(new java.awt.Color(0, 204, 51));
+        b_tambah.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        b_tambah.setText("Tambah");
+        b_tambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_tambahActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(140, 22, 22));
 
-        table_event.setModel(new javax.swing.table.DefaultTableModel(
+        table_ujian.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -55,7 +106,12 @@ public class panelUjian extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(table_event);
+        table_ujian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_ujianMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table_ujian);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -91,13 +147,29 @@ public class panelUjian extends javax.swing.JPanel {
         bExport.setForeground(new java.awt.Color(255, 255, 255));
         bExport.setText("Export PDF");
         bExport.setToolTipText("");
+        bExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExportActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Tanggal Awal");
+
+        jLabel4.setText("Tanggal Awal");
+
+        b_reset.setText("Reset");
+        b_reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_resetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(829, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(bExport)
                 .addGap(28, 28, 28))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -107,20 +179,44 @@ public class panelUjian extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(163, Short.MAX_VALUE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(b_tambah)
+                                .addGap(129, 129, 129)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(tStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(31, 31, 31)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(tEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(b_reset)))))))
+                .addContainerGap(142, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(1, 1, 1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(3, 3, 3)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(b_tambah)
+                    .addComponent(tStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(b_reset)
+                        .addComponent(tEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addComponent(bExport)
                 .addGap(16, 16, 16))
         );
@@ -137,15 +233,64 @@ public class panelUjian extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void b_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_tambahActionPerformed
+        popUpTambahKegiatan tambahUjian = new popUpTambahKegiatan(this);
+        tambahUjian.setVisible(true);
+        tambahUjian.tampilan_tambah_ujian();
+    }//GEN-LAST:event_b_tambahActionPerformed
+
+    private void table_ujianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_ujianMouseClicked
+        int baris = table_ujian.rowAtPoint(evt.getPoint());
+
+        if (baris >= 0) {
+            String id = table_ujian.getValueAt(baris, 1).toString();
+            Object namaobj = table_ujian.getValueAt(baris, 2).toString();
+            Object tglMulaiobj = table_ujian.getValueAt(baris, 3);
+            Object tglAkhirobj = table_ujian.getValueAt(baris, 4);
+            Object lokasiobj = table_ujian.getValueAt(baris, 5).toString();
+            Object pelatihobj = table_ujian.getValueAt(baris, 6).toString();
+
+            // Mengonversi objek menjadi string, jika null maka hasilnya null atau string kosong
+            String nama = (namaobj != null) ? namaobj.toString() : null;
+            String tglMulai = (tglMulaiobj != null) ? tglMulaiobj.toString() : null;
+            String tglAkhir = (tglAkhirobj != null) ? tglAkhirobj.toString() : null;
+            String lokasi = (lokasiobj != null) ? lokasiobj.toString() : null;
+            String pelatih = (pelatihobj != null) ? pelatihobj.toString() : null;
+
+            popUpTambahKegiatan edit = new popUpTambahKegiatan(this);
+            edit.tampil_data(id, nama, tglMulai, tglAkhir, lokasi, pelatih);
+            edit.setVisible(true);
+            edit.tampilan_edit_ujian();
+        }
+    }//GEN-LAST:event_table_ujianMouseClicked
+
+    private void b_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_resetActionPerformed
+        tStartDate.setDate(null);
+        tEndDate.setDate(null);
+        load_table_ujian();
+    }//GEN-LAST:event_b_resetActionPerformed
+
+    private void bExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportActionPerformed
+        Date awal = tStartDate.getDate();
+        Date akhir = tEndDate.getDate();
+        laporan lap = new laporan();
+        lap.generateLaporanEvent(awal, akhir);
+    }//GEN-LAST:event_bExportActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bExport;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton b_reset;
+    private javax.swing.JButton b_tambah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table_event;
+    private com.toedter.calendar.JDateChooser tEndDate;
+    private com.toedter.calendar.JDateChooser tStartDate;
+    private javax.swing.JTable table_ujian;
     // End of variables declaration//GEN-END:variables
 }

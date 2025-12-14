@@ -4,6 +4,11 @@
  */
 package tampilan;
 
+import javax.swing.table.DefaultTableModel;
+import kelas.laporan;
+import kelas.registrasi;
+import kelas.ujian;
+
 /**
  *
  * @author HP
@@ -15,6 +20,20 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
      */
     public popUpDataRegistrasi() {
         initComponents();
+    }
+
+    public void tampilData(String idRegistrasi) {
+        registrasi regis = new registrasi();
+        DefaultTableModel model = regis.tampilData(idRegistrasi);
+        table_peserta.setModel(model);
+        regis.tampilKegiatan(idRegistrasi, lb_kegiatan, lb_tgl);
+    }
+
+    public void tampilDataAKhir(String idKegiatan) {
+        registrasi regis = new registrasi();
+        DefaultTableModel model = regis.tampilDataAkhir(idKegiatan, lb_kegiatan, lb_tgl);
+        table_peserta.setModel(model);
+
     }
 
     /**
@@ -36,7 +55,7 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_peserta = new javax.swing.JTable();
         bPrint = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        b_kembali = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,11 +92,21 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
         bPrint.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bPrint.setForeground(new java.awt.Color(255, 255, 255));
         bPrint.setText("Print");
+        bPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bPrintActionPerformed(evt);
+            }
+        });
 
-        jButton1.setBackground(new java.awt.Color(255, 0, 102));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("<Back");
+        b_kembali.setBackground(new java.awt.Color(255, 0, 102));
+        b_kembali.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        b_kembali.setForeground(new java.awt.Color(255, 255, 255));
+        b_kembali.setText("<Back");
+        b_kembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_kembaliActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -106,7 +135,7 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(b_kembali)
                         .addGap(18, 18, 18)
                         .addComponent(bPrint)
                         .addGap(25, 25, 25))
@@ -134,7 +163,7 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bPrint)
-                    .addComponent(jButton1))
+                    .addComponent(b_kembali))
                 .addGap(17, 17, 17))
         );
 
@@ -151,6 +180,21 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void b_kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_kembaliActionPerformed
+        dispose();
+    }//GEN-LAST:event_b_kembaliActionPerformed
+
+    private void bPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrintActionPerformed
+        ujian uj = new ujian();
+        String namaKegiatan = lb_kegiatan.getText();
+        String tglMulai = lb_tgl.getText();
+        String idKegiatan = uj.getIdKegiatanByName(namaKegiatan);
+
+        //cetak laporan
+        laporan laporan = new laporan();
+        laporan.generateDataRegistrasi(idKegiatan, lb_kegiatan, lb_tgl);
+    }//GEN-LAST:event_bPrintActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,7 +264,7 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bPrint;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton b_kembali;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

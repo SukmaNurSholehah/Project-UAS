@@ -4,6 +4,11 @@
  */
 package tampilan;
 
+import java.awt.Color;
+import javax.swing.table.DefaultTableModel;
+import kelas.laporan;
+import kelas.pelatih;
+
 /**
  *
  * @author Sukma Nur
@@ -15,6 +20,14 @@ public class PanelPelatih extends javax.swing.JPanel {
      */
     public PanelPelatih() {
         initComponents();
+        loadTablePelatih();
+    }
+
+    public void loadTablePelatih() {
+        pelatih plt = new pelatih();
+        DefaultTableModel model = plt.showPelatih();
+        table_pelatih.setModel(model);
+        plt.aturTable(table_pelatih);
     }
 
     /**
@@ -33,8 +46,9 @@ public class PanelPelatih extends javax.swing.JPanel {
         bReset = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table_pelatih = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        bExport = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(950, 650));
 
@@ -59,13 +73,31 @@ public class PanelPelatih extends javax.swing.JPanel {
         tCariPelatih.setForeground(new java.awt.Color(181, 181, 181));
         tCariPelatih.setText("Nama Pelatih");
         tCariPelatih.setPreferredSize(new java.awt.Dimension(86, 35));
+        tCariPelatih.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tCariPelatihFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tCariPelatihFocusLost(evt);
+            }
+        });
+        tCariPelatih.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tCariPelatihKeyReleased(evt);
+            }
+        });
 
         bReset.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bReset.setText("Reset");
+        bReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bResetActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(140, 22, 22));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table_pelatih.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -76,7 +108,12 @@ public class PanelPelatih extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        table_pelatih.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_pelatihMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table_pelatih);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(250, 240, 230));
@@ -106,6 +143,16 @@ public class PanelPelatih extends javax.swing.JPanel {
                 .addGap(31, 31, 31))
         );
 
+        bExport.setBackground(new java.awt.Color(255, 51, 51));
+        bExport.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bExport.setForeground(new java.awt.Color(255, 255, 255));
+        bExport.setText("Export PDF");
+        bExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -126,6 +173,10 @@ public class PanelPelatih extends javax.swing.JPanel {
                                 .addGap(112, 112, 112)
                                 .addComponent(bReset)))))
                 .addContainerGap(124, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(bExport)
+                .addGap(61, 61, 61))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,7 +190,9 @@ public class PanelPelatih extends javax.swing.JPanel {
                     .addComponent(bReset))
                 .addGap(26, 26, 26)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(bExport)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -159,11 +212,70 @@ public class PanelPelatih extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
-        // TODO add your handling code here:
+        popUpTambahPelatih pelatih = new popUpTambahPelatih(this);
+        pelatih.setVisible(true);
+        pelatih.tampilanTambah();
     }//GEN-LAST:event_bTambahActionPerformed
+
+    private void bResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResetActionPerformed
+        tCariPelatih.setText("Nama Pelatih");
+        tCariPelatih.setForeground(Color.GRAY);
+        loadTablePelatih();
+    }//GEN-LAST:event_bResetActionPerformed
+
+    private void tCariPelatihKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCariPelatihKeyReleased
+        String kataKunci = tCariPelatih.getText();
+        pelatih plt = new pelatih();
+        DefaultTableModel model = plt.filterTable(kataKunci);
+        table_pelatih.setModel(model);
+        plt.aturTable(table_pelatih);
+    }//GEN-LAST:event_tCariPelatihKeyReleased
+
+    private void table_pelatihMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_pelatihMouseClicked
+        int baris = table_pelatih.rowAtPoint(evt.getPoint());
+
+        String id = table_pelatih.getValueAt(baris, 1).toString();
+        Object namaObjek = table_pelatih.getValueAt(baris, 2);
+        Object kontakObjek = table_pelatih.getValueAt(baris, 3);
+        Object sabukObjek = table_pelatih.getValueAt(baris, 4);
+
+        // Mengonversi objek menjadi string, jika null maka hasilnya null atau string kosong
+        String nama = (namaObjek != null) ? namaObjek.toString() : null;
+        String kontak = (kontakObjek != null) ? kontakObjek.toString() : null;
+        String sabuk = (sabukObjek != null) ? sabukObjek.toString() : null;
+
+        popUpTambahPelatih pelatih = new popUpTambahPelatih(this);
+        pelatih.tampilData(id, nama, kontak, sabuk);
+        pelatih.setVisible(true);
+        pelatih.tampilanEdit();
+    }//GEN-LAST:event_table_pelatihMouseClicked
+
+    private void bExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportActionPerformed
+        String namaPelatih = tCariPelatih.getText();
+        laporan lap = new laporan();
+        lap.generateLaporanPelatih(namaPelatih);
+    }//GEN-LAST:event_bExportActionPerformed
+
+    private void tCariPelatihFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCariPelatihFocusGained
+        String placeholder = "Nama Pelatih";
+        if (tCariPelatih.getText().equals(placeholder)) {
+            tCariPelatih.setText("");
+            tCariPelatih.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_tCariPelatihFocusGained
+
+    private void tCariPelatihFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCariPelatihFocusLost
+        String placeholder = "Nama Pelatih";
+
+        if (tCariPelatih.getText().isEmpty()) {
+            tCariPelatih.setText(placeholder);
+            tCariPelatih.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_tCariPelatihFocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bExport;
     private javax.swing.JButton bReset;
     private javax.swing.JButton bTambah;
     private javax.swing.JLabel jLabel1;
@@ -171,7 +283,7 @@ public class PanelPelatih extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField tCariPelatih;
+    private javax.swing.JTable table_pelatih;
     // End of variables declaration//GEN-END:variables
 }

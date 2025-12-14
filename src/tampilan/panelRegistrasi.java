@@ -4,6 +4,13 @@
  */
 package tampilan;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import kelas.laporan;
+import kelas.registrasi;
+
 /**
  *
  * @author Sukma Nur
@@ -13,8 +20,59 @@ public class panelRegistrasi extends javax.swing.JPanel {
     /**
      * Creates new form panelRegistrasi
      */
+    public static String currentDate;//--> menyimpan tgl secara global
+
     public panelRegistrasi() {
         initComponents();
+        load_table_regis();
+        setTanggalListener();
+    }
+
+    public void load_table_regis() {
+        registrasi regis = new registrasi();
+        DefaultTableModel model = regis.showRegistrasi();
+        table_registrasi.setModel(model);
+        regis.aturTable(table_registrasi);
+    }
+
+    private void filterTGL() {
+        Date tglAwal = tStartDate.getDate();
+        Date tglAkhir = tEndDate.getDate();
+
+        // Cek null terlebih dahulu
+        if (tglAwal == null || tglAkhir == null) {
+            return; // hentikan supaya tidak error
+        }
+
+        registrasi regis = new registrasi();
+        DefaultTableModel model = regis.filterTable(tglAwal, tglAkhir);
+        table_registrasi.setModel(model);
+        regis.aturTable(table_registrasi);
+    }
+
+    private void setTanggalListener() {
+        tStartDate.addPropertyChangeListener("date", evt -> {
+            if (tStartDate.getDate() != null && tStartDate.getDate() != null) {
+                filterTGL();
+            }
+        });
+
+        tEndDate.addPropertyChangeListener("date", evt -> {
+            if (tEndDate.getDate() != null && tEndDate.getDate() != null) {
+                filterTGL();
+            }
+        });
+    }
+
+    public void tampilkanTanggal() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String tanggalSekarang = sdf.format(new Date());
+        lbl_tgl.setText(tanggalSekarang);
+        currentDate = tanggalSekarang; //simpan ke variabel global
+    }
+
+    public static String simpanTanggal() {
+        return currentDate;
     }
 
     /**
@@ -35,7 +93,9 @@ public class panelRegistrasi extends javax.swing.JPanel {
         bExport = new javax.swing.JButton();
         bTambah = new javax.swing.JButton();
         tStartDate = new com.toedter.calendar.JDateChooser();
-        jEndDate = new com.toedter.calendar.JDateChooser();
+        tEndDate = new com.toedter.calendar.JDateChooser();
+        lbl_tgl = new javax.swing.JLabel();
+        b_reset = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
         jPanel1.setPreferredSize(new java.awt.Dimension(950, 650));
@@ -53,6 +113,11 @@ public class panelRegistrasi extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        table_registrasi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_registrasiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_registrasi);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -90,6 +155,11 @@ public class panelRegistrasi extends javax.swing.JPanel {
         bExport.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bExport.setForeground(new java.awt.Color(255, 255, 255));
         bExport.setText("Export PDF");
+        bExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExportActionPerformed(evt);
+            }
+        });
 
         bTambah.setBackground(new java.awt.Color(0, 204, 0));
         bTambah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -103,14 +173,25 @@ public class panelRegistrasi extends javax.swing.JPanel {
 
         tStartDate.setBorder(javax.swing.BorderFactory.createTitledBorder("Start Date"));
 
-        jEndDate.setBorder(javax.swing.BorderFactory.createTitledBorder("End Date"));
+        tEndDate.setBorder(javax.swing.BorderFactory.createTitledBorder("End Date"));
+
+        lbl_tgl.setBackground(new java.awt.Color(255, 204, 204));
+        lbl_tgl.setForeground(new java.awt.Color(250, 240, 230));
+        lbl_tgl.setText("jLabel3");
+
+        b_reset.setText("Reset");
+        b_reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_resetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,10 +201,14 @@ public class panelRegistrasi extends javax.swing.JPanel {
                                 .addGap(109, 109, 109)
                                 .addComponent(tStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(43, 43, 43)
-                                .addComponent(jEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(b_reset)
+                            .addComponent(lbl_tgl, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -133,16 +218,20 @@ public class panelRegistrasi extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lbl_tgl))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(bTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(b_reset)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(tEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
@@ -165,19 +254,112 @@ public class panelRegistrasi extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
-        // TODO add your handling code here:
+        poUpTambahDataRegistrasi tambahRegist = new poUpTambahDataRegistrasi(this);
+        tambahRegist.setVisible(true);
+        tambahRegist.tampilan_tambah_regist();
     }//GEN-LAST:event_bTambahActionPerformed
+
+    private void table_registrasiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_registrasiMouseClicked
+        int baris = table_registrasi.rowAtPoint(evt.getPoint());
+
+        //pengecekkan tanggal
+        if (baris >= 0) {
+            String idRegis = table_registrasi.getValueAt(baris, 1).toString();
+            String namaRegis = table_registrasi.getValueAt(baris, 2).toString(); // kolom namaKegiatan
+            String tglMulaiStr = table_registrasi.getValueAt(baris, 3).toString(); // kolom tgl mulai
+            String tglSelesaiStr = table_registrasi.getValueAt(baris, 4).toString(); // kolom tgl selesai
+            String lokasi = table_registrasi.getValueAt(baris, 5).toString(); // kolom tgl selesai
+            String parentUjian = table_registrasi.getValueAt(baris, 6).toString(); // kolom tgl selesai
+
+            String[] options = {"Ubah Data", "Tambah Peserta", "Batal"};
+
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "Pilih aksi yang ingin dilakukan:",
+                    "Konfirmasi",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            if (choice == 0) {
+                // Aksi jika pilih Ubah Data
+                poUpTambahDataRegistrasi regis = new poUpTambahDataRegistrasi(this);
+                regis.setVisible(true);
+                regis.tampil_data(idRegis, namaRegis, tglMulaiStr, tglMulaiStr, lokasi, parentUjian);
+                regis.tampilan_edit_regist();
+            } else if (choice == 1) {
+                // Aksi jika pilih Tambah Peserta
+                try {
+                    // Format tanggal dari database (biasanya yyyy-MM-dd)
+                    SimpleDateFormat sdfDB = new SimpleDateFormat("yyyy-MM-dd");
+                    Date tglMulai = sdfDB.parse(tglMulaiStr);
+                    Date tglSelesai = sdfDB.parse(tglSelesaiStr);
+
+                    // Ambil tanggal hari ini dari lbl_tgl (format dd-MM-yyyy)
+                    SimpleDateFormat sdfNow = new SimpleDateFormat("dd-MM-yyyy");
+                    Date tanggalSekarang = sdfNow.parse(currentDate);
+
+                    // Bandingkan tanggal
+                    if (!tanggalSekarang.before(tglMulai) && !tanggalSekarang.after(tglSelesai)) {
+                        // Hari ini di antara tgl_mulai dan tgl_selesai
+                        popUpTambahRegistrasi tambah_regis = new popUpTambahRegistrasi(idRegis);
+                        tambah_regis.setVisible(true);
+                        tambah_regis.namaKegiatan(namaRegis); // set nama kegiatan di panel tambah registrasi
+                        JOptionPane.showMessageDialog(null,
+                                "Periode registrasi masih berlangsung sampai " + tglSelesaiStr);
+                    } else if (tanggalSekarang.before(tglMulai)) {
+                        // Hari ini sebelum tgl_mulai 
+                        /*popUp_data_registrasi data_regis = new popUp_data_registrasi();
+                    data_regis.setVisible(true); */
+                        JOptionPane.showMessageDialog(null,
+                                "Periode registrasi belum dimulai.");
+                    } else if (tanggalSekarang.after(tglSelesai)) {
+                        // Hari ini setlah tgl_selesai 
+                        popUpDataRegistrasi data = new popUpDataRegistrasi();
+                        data.tampilDataAKhir(idRegis);
+                        data.setVisible(true);
+                        JOptionPane.showMessageDialog(null,
+                                "Periode registrasi sudah berakhir.");
+
+                    }
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
+            } else {
+            }
+        }
+    }//GEN-LAST:event_table_registrasiMouseClicked
+
+    private void b_resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_resetActionPerformed
+        tStartDate.setDate(null);
+        tEndDate.setDate(null);
+        load_table_regis();
+    }//GEN-LAST:event_b_resetActionPerformed
+
+    private void bExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportActionPerformed
+        Date awal = tStartDate.getDate();
+        Date akhir = tEndDate.getDate();
+        laporan lap = new laporan();
+        lap.generateLaporanRegistrasi(awal, akhir);
+    }//GEN-LAST:event_bExportActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bExport;
     private javax.swing.JButton bTambah;
-    private com.toedter.calendar.JDateChooser jEndDate;
+    private javax.swing.JButton b_reset;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_tgl;
+    private com.toedter.calendar.JDateChooser tEndDate;
     private com.toedter.calendar.JDateChooser tStartDate;
     private javax.swing.JTable table_registrasi;
     // End of variables declaration//GEN-END:variables
