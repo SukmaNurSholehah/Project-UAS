@@ -168,12 +168,14 @@ public class pelatih extends koneksi {
     }
 
     public void comboSabuk(JComboBox cSabuk) {
+        cSabuk.removeAllItems();
         try {
             query = "SELECT nama_sabuk FROM sabuk";
             st = con.createStatement();
             rs = st.executeQuery(query);
 
             while (rs.next()) {
+                
                 cSabuk.addItem(rs.getString("nama_sabuk"));
 
             }

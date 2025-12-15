@@ -251,9 +251,8 @@ public class PanelPelatih extends javax.swing.JPanel {
     }//GEN-LAST:event_table_pelatihMouseClicked
 
     private void bExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportActionPerformed
-        String namaPelatih = tCariPelatih.getText();
         laporan lap = new laporan();
-        lap.generateLaporanPelatih(namaPelatih);
+        lap.generateLaporanPelatih();
     }//GEN-LAST:event_bExportActionPerformed
 
     private void tCariPelatihFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCariPelatihFocusGained

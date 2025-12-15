@@ -64,16 +64,6 @@ public class panelRegistrasi extends javax.swing.JPanel {
         });
     }
 
-    public void tampilkanTanggal() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String tanggalSekarang = sdf.format(new Date());
-        lbl_tgl.setText(tanggalSekarang);
-        currentDate = tanggalSekarang; //simpan ke variabel global
-    }
-
-    public static String simpanTanggal() {
-        return currentDate;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,7 +84,6 @@ public class panelRegistrasi extends javax.swing.JPanel {
         bTambah = new javax.swing.JButton();
         tStartDate = new com.toedter.calendar.JDateChooser();
         tEndDate = new com.toedter.calendar.JDateChooser();
-        lbl_tgl = new javax.swing.JLabel();
         b_reset = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
@@ -175,10 +164,6 @@ public class panelRegistrasi extends javax.swing.JPanel {
 
         tEndDate.setBorder(javax.swing.BorderFactory.createTitledBorder("End Date"));
 
-        lbl_tgl.setBackground(new java.awt.Color(255, 204, 204));
-        lbl_tgl.setForeground(new java.awt.Color(250, 240, 230));
-        lbl_tgl.setText("jLabel3");
-
         b_reset.setText("Reset");
         b_reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,9 +191,8 @@ public class panelRegistrasi extends javax.swing.JPanel {
                         .addContainerGap()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(b_reset)
-                            .addComponent(lbl_tgl, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(b_reset)
+                        .addGap(79, 79, 79)))
                 .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -218,9 +202,7 @@ public class panelRegistrasi extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(lbl_tgl))
+                .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -264,8 +246,8 @@ public class panelRegistrasi extends javax.swing.JPanel {
 
         //pengecekkan tanggal
         if (baris >= 0) {
-            String idRegis = table_registrasi.getValueAt(baris, 1).toString();
-            String namaRegis = table_registrasi.getValueAt(baris, 2).toString(); // kolom namaKegiatan
+            String idKegiatan = table_registrasi.getValueAt(baris, 1).toString();
+            String namaKegiatan = table_registrasi.getValueAt(baris, 2).toString(); // kolom namaKegiatan
             String tglMulaiStr = table_registrasi.getValueAt(baris, 3).toString(); // kolom tgl mulai
             String tglSelesaiStr = table_registrasi.getValueAt(baris, 4).toString(); // kolom tgl selesai
             String lokasi = table_registrasi.getValueAt(baris, 5).toString(); // kolom tgl selesai
@@ -288,50 +270,44 @@ public class panelRegistrasi extends javax.swing.JPanel {
                 // Aksi jika pilih Ubah Data
                 poUpTambahDataRegistrasi regis = new poUpTambahDataRegistrasi(this);
                 regis.setVisible(true);
-                regis.tampil_data(idRegis, namaRegis, tglMulaiStr, tglMulaiStr, lokasi, parentUjian);
+                regis.tampil_data(idKegiatan, namaKegiatan, tglMulaiStr, tglMulaiStr, lokasi, parentUjian);
                 regis.tampilan_edit_regist();
             } else if (choice == 1) {
                 // Aksi jika pilih Tambah Peserta
                 try {
-                    // Format tanggal dari database (biasanya yyyy-MM-dd)
-                    SimpleDateFormat sdfDB = new SimpleDateFormat("yyyy-MM-dd");
-                    Date tglMulai = sdfDB.parse(tglMulaiStr);
-                    Date tglSelesai = sdfDB.parse(tglSelesaiStr);
+                // Format tanggal dari database (biasanya yyyy-MM-dd)
+                SimpleDateFormat sdfDB = new SimpleDateFormat("yyyy-MM-dd");
+                Date tglMulai = sdfDB.parse(tglMulaiStr);
+                Date tglSelesai = sdfDB.parse(tglSelesaiStr);
 
-                    // Ambil tanggal hari ini dari lbl_tgl (format dd-MM-yyyy)
-                    SimpleDateFormat sdfNow = new SimpleDateFormat("dd-MM-yyyy");
-                    Date tanggalSekarang = sdfNow.parse(currentDate);
+                // Ambil tanggal hari ini dari lbl_tgl (format dd-MM-yyyy)
+                Date tanggalSekarang = new Date(); 
 
-                    // Bandingkan tanggal
-                    if (!tanggalSekarang.before(tglMulai) && !tanggalSekarang.after(tglSelesai)) {
-                        // Hari ini di antara tgl_mulai dan tgl_selesai
-                        popUpTambahRegistrasi tambah_regis = new popUpTambahRegistrasi(idRegis);
-                        tambah_regis.setVisible(true);
-                        tambah_regis.namaKegiatan(namaRegis); // set nama kegiatan di panel tambah registrasi
-                        JOptionPane.showMessageDialog(null,
-                                "Periode registrasi masih berlangsung sampai " + tglSelesaiStr);
-                    } else if (tanggalSekarang.before(tglMulai)) {
-                        // Hari ini sebelum tgl_mulai 
-                        /*popUp_data_registrasi data_regis = new popUp_data_registrasi();
-                    data_regis.setVisible(true); */
-                        JOptionPane.showMessageDialog(null,
-                                "Periode registrasi belum dimulai.");
-                    } else if (tanggalSekarang.after(tglSelesai)) {
-                        // Hari ini setlah tgl_selesai 
-                        popUpDataRegistrasi data = new popUpDataRegistrasi();
-                        data.tampilDataAKhir(idRegis);
-                        data.setVisible(true);
-                        JOptionPane.showMessageDialog(null,
-                                "Periode registrasi sudah berakhir.");
-
-                    }
-
-                } catch (Exception e) {
-                    System.out.println(e);
+                // Bandingkan tanggal
+                if (!tanggalSekarang.before(tglMulai) && !tanggalSekarang.after(tglSelesai)) {
+                    // Hari ini di antara tgl_mulai dan tgl_selesai
+                    popUpTambahRegistrasi tambah_regis = new popUpTambahRegistrasi(idKegiatan);
+                    tambah_regis.setVisible(true);
+                    tambah_regis.namaKegiatan(namaKegiatan); // set nama kegiatan di panel tambah registrasi
+                    JOptionPane.showMessageDialog(null,
+                            "Periode registrasi masih berlangsung sampai " + tglSelesaiStr);
+                } else if (tanggalSekarang.before(tglMulai)) {
+                    // Hari ini sebelum tgl_mulai 
+                    JOptionPane.showMessageDialog(null,
+                            "Periode registrasi belum dimulai.");
+                } else if (tanggalSekarang.after(tglSelesai)) {
+                    // Hari ini setlah tgl_selesai 
+                    popUpDataRegistrasi data = new popUpDataRegistrasi();
+                    data.tampilDataAKhir(idKegiatan);
+                    data.setVisible(true);
+                    JOptionPane.showMessageDialog(null,
+                            "Periode registrasi sudah berakhir.");
                 }
-
-            } else {
+            } catch (Exception e) {
+                System.out.println(e);
+                e.printStackTrace();
             }
+            } 
         }
     }//GEN-LAST:event_table_registrasiMouseClicked
 
@@ -358,7 +334,6 @@ public class panelRegistrasi extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbl_tgl;
     private com.toedter.calendar.JDateChooser tEndDate;
     private com.toedter.calendar.JDateChooser tStartDate;
     private javax.swing.JTable table_registrasi;

@@ -29,6 +29,11 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
     public popUpTambahPelatih(PanelPelatih pPelatih) {
         initComponents();
         this.pnPelatih = pPelatih;
+        
+        pelatih plt = new pelatih();
+        plt.autoID(tIDPelatih);
+        cSabuk.removeAllItems();
+        plt.comboSabuk(cSabuk);
     }
 
     private void reset() {
@@ -199,8 +204,6 @@ public class popUpTambahPelatih extends javax.swing.JFrame {
                 bHapusActionPerformed(evt);
             }
         });
-
-        cSabuk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Nama Pelatih");

@@ -5,13 +5,8 @@
 package tampilan;
 
 import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import kelas.koneksi;
 import kelas.registrasi;
 
 /**
@@ -29,16 +24,18 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
     public popUpTambahRegistrasi(String idRegis) {
         initComponents();
         setTableModel();
-
-        registrasi regis = new registrasi();
+        
+        if(lbIDdetailRegistrasi != null){
+            registrasi regis = new registrasi();
         regis.autoIDDetail(lbIDdetailRegistrasi);
-        reset();
+        }
+        
     }
 
     void reset() {
-        t_id.setText(null);
-        t_nama.setText(null);
-        t_status.setText(null);
+        t_id.setText("");
+        t_nama.setText("");
+        t_status.setText("");
     }
 
     void setTableModel() {
@@ -58,7 +55,9 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
     }
 
     public void namaKegiatan(String namaKegiatan) {
-        lbNamaKegiatan.setText(namaKegiatan);
+        lbNamaKegiatan.setText(
+                namaKegiatan == null ? "" : namaKegiatan
+        );
     }
 
     String konversiID(String namaRegis) {
@@ -98,6 +97,8 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         lbIDdetailRegistrasi = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lbNamaKegiatan = new javax.swing.JLabel();
+        bHapus = new javax.swing.JButton();
+        bUbah = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +137,11 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        table_peserta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_pesertaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_peserta);
 
         b_simpan.setBackground(new java.awt.Color(0, 255, 51));
@@ -187,6 +193,21 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
 
         lbNamaKegiatan.setText("........");
 
+        bHapus.setText("Delete");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
+
+        bUbah.setText("Edit");
+        bUbah.setToolTipText("");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pn_dasarLayout = new javax.swing.GroupLayout(pn_dasar);
         pn_dasar.setLayout(pn_dasarLayout);
         pn_dasarLayout.setHorizontalGroup(
@@ -205,23 +226,28 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
                                 .addComponent(bDetail)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(b_simpan))
-                            .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(b_cari)
-                                .addGroup(pn_dasarLayout.createSequentialGroup()
-                                    .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(t_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(t_status, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(18, 18, 18)
-                                    .addComponent(bAdd))
-                                .addGroup(pn_dasarLayout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lbIDdetailRegistrasi, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(pn_dasarLayout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lbNamaKegiatan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(pn_dasarLayout.createSequentialGroup()
+                                .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(b_cari)
+                                    .addGroup(pn_dasarLayout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lbIDdetailRegistrasi, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pn_dasarLayout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lbNamaKegiatan, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(61, 61, 61))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pn_dasarLayout.createSequentialGroup()
+                                .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(t_nama, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(t_status, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(bAdd)
+                                    .addComponent(bHapus)
+                                    .addComponent(bUbah))))))
                 .addGap(26, 26, 26))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pn_dasarLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -244,13 +270,17 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addComponent(b_cari)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(t_nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bAdd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bAdd)
-                    .addComponent(t_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(t_nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bUbah))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pn_dasarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(t_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bHapus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -340,6 +370,63 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_bBackActionPerformed
 
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        int row = table_peserta.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Pilih data terlebih dahulu");
+            return;
+        }
+
+        String id = t_id.getText();
+        String nama = t_nama.getText();
+        String status = t_status.getText();
+
+        // Update JTable
+        modelRegistrasi.setValueAt(id, row, 1);
+        modelRegistrasi.setValueAt(nama, row, 2);
+        modelRegistrasi.setValueAt(status, row, 3);
+
+        // Update ArrayList (data sementara)
+        daftarAnggota.set(row, new String[]{id, nama, status});
+
+        reset();
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void table_pesertaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_pesertaMouseClicked
+        int barisDipilih = table_peserta.rowAtPoint(evt.getPoint());
+
+        //ambil nilai 
+        String idAnggota = table_peserta.getValueAt(barisDipilih, 1).toString();
+        String namaAnggta = table_peserta.getValueAt(barisDipilih, 2).toString();
+        String status = table_peserta.getValueAt(barisDipilih, 3).toString();
+
+        //tampilkan  ke textField 
+        t_id.setText(idAnggota);
+        t_nama.setText(namaAnggta);
+        t_status.setText(status);
+    }//GEN-LAST:event_table_pesertaMouseClicked
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        int row = table_peserta.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Pilih data terlebih dahulu");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Yakin ingin menghapus data ini?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            modelRegistrasi.removeRow(row);
+            daftarAnggota.remove(row);
+            reset();
+        }
+    }//GEN-LAST:event_bHapusActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -410,6 +497,8 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
     private javax.swing.JButton bAdd;
     private javax.swing.JButton bBack;
     private javax.swing.JButton bDetail;
+    private javax.swing.JButton bHapus;
+    private javax.swing.JButton bUbah;
     private javax.swing.JButton b_cari;
     private javax.swing.JButton b_simpan;
     private javax.swing.JLabel jLabel1;

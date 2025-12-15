@@ -143,7 +143,7 @@ public class registrasi extends koneksi {
     }
 
     public void hapusRegis() {
-        query = "DELETE FROM event_ujian WHERE ID_event = ?";
+        query = "DELETE FROM registrasi WHERE ID_registrasi = ?";
         try {
             ps = con.prepareStatement(query);
             ps.setString(1, idRegitrasi);
@@ -176,34 +176,34 @@ public class registrasi extends koneksi {
 
     public void comboUjian(JComboBox cUjian) {
         try {
-            query = "SELECT nama_event FROM event_ujian";
+            query = "SELECT nama_kegiatan FROM kegiatan";
             st = con.createStatement();
             rs = st.executeQuery(query);
 
             while (rs.next()) {
-                cUjian.addItem(rs.getString("nama_event"));
+                cUjian.addItem(rs.getString("nama_kegiatan"));
 
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        cUjian.setSelectedIndex(0);
+        cUjian.setSelectedItem(null);
     }
 
     public String konversIDRegis(String namaregis) {
-        String idUjian = "";
+        String idRegis = "";
         try {
             query = "SELECT ID_registrasi FROM registrasi WHERE nama_registrasi=?";
             ps = con.prepareStatement(query);
             ps.setString(1, namaregis);
             rs = ps.executeQuery();
             while (rs.next()) {
-                idUjian = rs.getString("ID_registrasi");
+                idRegis = rs.getString("ID_registrasi");
             }
             ps.close();
         } catch (SQLException e) {
         }
-        return idUjian;
+        return idRegis;
     }
 
     public DefaultTableModel showRegistrasi() {
@@ -218,9 +218,9 @@ public class registrasi extends koneksi {
 
         try {
             query = "SELECT r.ID_registrasi, r.nama_registrasi, r.tgl_mulai, r.tgl_selesai, "
-                    + "r.lokasi, e.nama_event "
+                    + "r.lokasi, k.nama_kegiatan "
                     + "FROM registrasi r "
-                    + "JOIN event_ujian e ON r.parent_ujian = e.ID_event";
+                    + "JOIN kegiatan k ON r.parent_ujian = k.ID_kegiatan";
             st = con.createStatement();
             rs = st.executeQuery(query);
 
@@ -233,7 +233,7 @@ public class registrasi extends koneksi {
                     rs.getString("tgl_mulai"),
                     rs.getString("tgl_selesai"),
                     rs.getString("lokasi"),
-                    rs.getString("nama_event")
+                    rs.getString("nama_kegiatan")
                 });
             }
         } catch (SQLException e) {
@@ -284,12 +284,12 @@ public class registrasi extends koneksi {
 
         try {
             query = "SELECT a.ID_anggota, a.nama_anggota, a.status,"
-                    + " e.nama_event, e.tgl_mulai "
+                    + " k.nama-kegiatan, k.tgl_mulai "
                     + "FROM detail_registrasi d "
                     + "JOIN anggota a ON d.ID_anggota = a.ID_anggota "
                     + "JOIN registrasi r ON d.ID_registrasi = r.ID_registrasi "
-                    + "JOIN event_ujian e ON r.parent_ujian = e.ID_event "
-                    + "WHERE e.ID_event = ?";
+                    + "JOIN kegiatan k ON r.parent_ujian = k.ID_kegiatan "
+                    + "WHERE k.ID_kegiatan = ?";
             ps = con.prepareStatement(query);
             ps.setString(1, idKegiatan);
             rs = ps.executeQuery();
@@ -298,7 +298,7 @@ public class registrasi extends koneksi {
                 String idAnggota = rs.getString("ID_anggota");
                 String nama = rs.getString("nama_anggota");
                 String status = rs.getString("status");
-                String namaKegiatan = rs.getString("nama_event");
+                String namaKegiatan = rs.getString("nama_kegiatan");
                 String tglMulai = rs.getString("tgl_mulai");
                 model.addRow(new Object[]{no++, idAnggota, nama, status});
                 lbNamaKegiatan.setText(namaKegiatan);
@@ -314,15 +314,15 @@ public class registrasi extends koneksi {
     //tampilData untuk  menampilkan nama dan tgl mulai ujianlaporan akhir registrasi
     public void tampilKegiatan(String idRegistrasi, JLabel lblNamaEvent, JLabel lblTglMulai) {
         try {
-            query = "SELECT e.nama_event, e.tgl_mulai FROM event_ujian e "
-                    + " JOIN registrasi r ON r.parent_ujian = e.ID_event "
+            query = "SELECT k.nama_kegiatan, k.tgl_mulai FROM kegiatan k "
+                    + " JOIN registrasi r ON r.parent_ujian = k.ID_kegiatan "
                     + " WHERE r.ID_registrasi=?";
             ps = con.prepareStatement(query);
             ps.setString(1, idRegistrasi);
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                lblNamaEvent.setText(rs.getString("nama_event"));
+                lblNamaEvent.setText(rs.getString("nama_kegiatan"));
                 lblTglMulai.setText(rs.getString("tgl_mulai"));
             } else {
                 lblNamaEvent.setText("-");
@@ -345,9 +345,9 @@ public class registrasi extends koneksi {
 
         try {
             query = "SELECT r.ID_registrasi, r.nama_registrasi, r.tgl_mulai, r.tgl_selesai, "
-                    + "r.lokasi, e.nama_event "
+                    + "r.lokasi, k.nama_kegiatan "
                     + "FROM registrasi r "
-                    + "JOIN event_ujian e ON r.parent_ujian = e.ID_event "
+                    + "JOIN kegiatan k ON r.parent_ujian = k.ID_kegiatan "
                     + "WHERE r.tgl_mulai BETWEEN ? AND ? ";
 
             ps = con.prepareStatement(query);
@@ -371,7 +371,7 @@ public class registrasi extends koneksi {
                     rs.getString("tgl_mulai"),
                     rs.getString("tgl_selesai"),
                     rs.getString("lokasi"),
-                    rs.getString("nama_event")
+                    rs.getString("nama_kegiatan")
                 });
             }
         } catch (SQLException e) {
@@ -500,6 +500,7 @@ public class registrasi extends koneksi {
 
             lblIDDetail.setText(id);
         } catch (SQLException sQLException) {
+            lblIDDetail.setText("");
             JOptionPane.showMessageDialog(null, "Error saat generate Id Registrasi!");
             System.out.println(sQLException);
         }

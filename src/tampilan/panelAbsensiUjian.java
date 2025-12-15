@@ -4,6 +4,10 @@
  */
 package tampilan;
 
+import javax.swing.table.DefaultTableModel;
+import kelas.absensiUjian;
+import kelas.ujian;
+
 /**
  *
  * @author Sukma Nur
@@ -15,6 +19,14 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
      */
     public panelAbsensiUjian() {
         initComponents();
+        load_table_absensi();
+    }
+    
+     public  void load_table_absensi() {
+        ujian ujian = new ujian();
+        DefaultTableModel model = ujian.showKegiatan();
+        table_ujian.setModel(model);
+        ujian.aturTable(table_ujian);
     }
 
     /**
@@ -29,9 +41,8 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table_event_ujian = new javax.swing.JTable();
+        table_ujian = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
@@ -40,7 +51,7 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(140, 22, 22));
         jPanel2.setPreferredSize(new java.awt.Dimension(633, 441));
 
-        table_event_ujian.setModel(new javax.swing.table.DefaultTableModel(
+        table_ujian.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -51,7 +62,12 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(table_event_ujian);
+        table_ujian.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_ujianMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table_ujian);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -78,10 +94,6 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
                 .addGap(53, 53, 53))
         );
 
-        jButton1.setBackground(new java.awt.Color(0, 204, 51));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setText("Tambah");
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(140, 22, 22));
         jLabel1.setText("ABSENSI UJIAN");
@@ -93,7 +105,6 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(88, Short.MAX_VALUE))
@@ -103,9 +114,7 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(61, 61, 61)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(110, Short.MAX_VALUE))
         );
@@ -124,14 +133,30 @@ public class panelAbsensiUjian extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void table_ujianMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_ujianMouseClicked
+        int baris = table_ujian.rowAtPoint(evt.getPoint());
+        
+        if(baris >=0){
+            String id = table_ujian.getValueAt(baris, 1).toString();
+            String nama_event = table_ujian.getValueAt(baris, 2).toString();
+            String penguji = table_ujian.getValueAt(baris, 6).toString();
+            
+            absensiUjian absenujian = new absensiUjian();
+            String idRegis = absenujian.getIDregistrasi(id);
+            
+            popUpAbsensiUjian absen = new popUpAbsensiUjian(idRegis);
+            absen.setVisible(true);
+            absen.tampilData(nama_event, penguji); 
+        }
+    }//GEN-LAST:event_table_ujianMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table_event_ujian;
+    private javax.swing.JTable table_ujian;
     // End of variables declaration//GEN-END:variables
 }

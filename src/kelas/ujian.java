@@ -107,7 +107,7 @@ public class ujian extends koneksi {
 
     public void ubah_ujian() {
         query = "UPDATE kegiatan SET nama_kegiatan=?, tgl_mulai=?, tgl_selesai=?, lokasi=?,"
-                + " pelatih=? WHERE ID_kegiatan=?";
+                + " penguji=? WHERE ID_kegiatan=?";
         try {
             ps = con.prepareStatement(query);
             ps.setString(1, nama_kegiatan);
@@ -151,10 +151,10 @@ public class ujian extends koneksi {
         model.addColumn("Penguji");
 
         try {
-            query = "SELECT e.ID_kegiatan, e.nama_kegiatan, e.tgl_mulai, e.tgl_selesai, "
-                    + "e.lokasi, p.nama_pelatih "
-                    + "FROM event_ujian e "
-                    + "JOIN pelatih p ON e.pelatih = p.ID_pelatih ";
+            query = "SELECT k.ID_kegiatan, k.nama_kegiatan, k.tgl_mulai, k.tgl_selesai, "
+                    + "k.lokasi, p.nama_pelatih "
+                    + "FROM kegiatan k "
+                    + "JOIN pelatih p ON k.penguji = p.ID_pelatih ";
             st = con.createStatement();
             rs = st.executeQuery(query);
 

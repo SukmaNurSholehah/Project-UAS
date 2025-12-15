@@ -4,6 +4,12 @@
  */
 package tampilan;
 
+import javax.swing.table.DefaultTableModel;
+import kelas.absensiUjian;
+import kelas.hasilUjian;
+import kelas.laporan;
+import kelas.ujian;
+
 /**
  *
  * @author HP
@@ -13,8 +19,21 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
     /**
      * Creates new form popUp_hasil_peserta
      */
-    public popUpHasilPeserta() {
+    public popUpHasilPeserta(String idRegis) {
         initComponents();
+        loadTabel(idRegis);
+    }
+
+    void loadTabel(String idRegis) {
+        hasilUjian hasil = new hasilUjian();
+        DefaultTableModel model = hasil.detailHasil(idRegis);
+        table_peserta.setModel(model);
+    }
+
+    public void tampilketerangan(String tgl, String nama, String lokasi) {
+        lb_tgl.setText(tgl);
+        lb_ujian.setText(nama);
+        lb_lokasi.setText(lokasi);
     }
 
     /**
@@ -79,8 +98,18 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
         b_export.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         b_export.setForeground(new java.awt.Color(255, 255, 255));
         b_export.setText("Export PDF");
+        b_export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_exportActionPerformed(evt);
+            }
+        });
 
         tCariNamaAnggota.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Nama Anggota"));
+        tCariNamaAnggota.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tCariNamaAnggotaKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,6 +186,28 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tCariNamaAnggotaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCariNamaAnggotaKeyReleased
+        String kataKunci = tCariNamaAnggota.getText();
+        hasilUjian hasil = new hasilUjian();
+        DefaultTableModel model = hasil.serchNama(kataKunci);
+        table_peserta.setModel(model);
+    }//GEN-LAST:event_tCariNamaAnggotaKeyReleased
+
+    private void b_exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportActionPerformed
+       //ambil id ujian yg dikonversi dari nama ujian
+       String namaUjian = lb_ujian.getText();
+       ujian uj = new ujian();
+       String idUjian = uj.getIdKegiatanByName(namaUjian);
+       
+       //ubah idUjian menjadi idRegis
+       absensiUjian absen = new absensiUjian();
+       String idRegis = absen.getIDregistrasi(idUjian);
+       
+       //cetak laporan berdasarkan idRegis
+       laporan lap = new laporan();
+       lap.generateLaporanHasilUjian(idRegis);
+    }//GEN-LAST:event_b_exportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -216,11 +267,11 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpHasilPeserta().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUpHasilPeserta().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

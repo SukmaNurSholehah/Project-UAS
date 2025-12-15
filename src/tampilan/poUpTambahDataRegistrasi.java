@@ -24,6 +24,11 @@ public class poUpTambahDataRegistrasi extends javax.swing.JFrame {
     public poUpTambahDataRegistrasi(panelRegistrasi pRegis) {
         initComponents();
         this.pRegistrasi = pRegis;
+        
+        registrasi regis = new registrasi();
+        regis.autoID(t_idregist);
+        regis.comboUjian(cMainEvent);
+        reset();
     }
 
     void reset() {

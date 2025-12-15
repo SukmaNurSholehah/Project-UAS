@@ -4,6 +4,10 @@
  */
 package tampilan;
 
+import javax.swing.table.DefaultTableModel;
+import kelas.absensiUjian;
+import kelas.hasilUjian;
+
 /**
  *
  * @author Sukma Nur
@@ -15,6 +19,14 @@ public class panelHasilUjian extends javax.swing.JPanel {
      */
     public panelHasilUjian() {
         initComponents();
+        load_table_hasil_ujian();
+    }
+    
+    public  void load_table_hasil_ujian() {
+        hasilUjian hasil = new hasilUjian();
+       DefaultTableModel model = hasil.hasilUjian();
+       table_hasil.setModel(model);
+       hasil.aturTable(table_hasil);
     }
 
     /**
@@ -29,7 +41,7 @@ public class panelHasilUjian extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table_absensi = new javax.swing.JTable();
+        table_hasil = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -38,7 +50,7 @@ public class panelHasilUjian extends javax.swing.JPanel {
 
         jPanel2.setBackground(new java.awt.Color(140, 22, 22));
 
-        table_absensi.setModel(new javax.swing.table.DefaultTableModel(
+        table_hasil.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -49,7 +61,12 @@ public class panelHasilUjian extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(table_absensi);
+        table_hasil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_hasilMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(table_hasil);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -117,6 +134,23 @@ public class panelHasilUjian extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void table_hasilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_hasilMouseClicked
+        int baris = table_hasil.rowAtPoint(evt.getPoint());
+        if(baris >=0){
+            String id = table_hasil.getValueAt(baris, 1).toString();
+            String nama_event = table_hasil.getValueAt(baris, 2).toString();
+            String tgl = table_hasil.getValueAt(baris, 3).toString();
+            String lokasi = table_hasil.getValueAt(baris, 5).toString();
+            
+            absensiUjian absenujian = new absensiUjian();
+            String idRegis = absenujian.getIDregistrasi(id);//ambil idRegistrasi berdasarkan idEvent
+            
+            popUpHasilPeserta hasil = new popUpHasilPeserta(idRegis);
+            hasil.setVisible(true);
+            hasil.tampilketerangan(tgl, nama_event, lokasi); 
+        }
+    }//GEN-LAST:event_table_hasilMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -124,6 +158,6 @@ public class panelHasilUjian extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable table_absensi;
+    private javax.swing.JTable table_hasil;
     // End of variables declaration//GEN-END:variables
 }

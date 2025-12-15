@@ -300,7 +300,7 @@ public class laporan {
         }
     }
 
-    public void generateLaporanPelatih(String namaPelatih) {
+    public void generateLaporanPelatih() {
 
         try {
             pelatih plt = new pelatih();
@@ -322,6 +322,31 @@ public class laporan {
 
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+    
+    public void generateLaporanHasilUjian(String IDregis) {
+
+        try {
+            hasilUjian hasil = new hasilUjian();
+            DefaultTableModel model = hasil.detailHasil(IDregis);
+
+            // Format tanggal hari ini (YYYY-MM-DD)
+            String tanggal = new java.text.SimpleDateFormat("yyyy-MM-dd")
+                    .format(new java.util.Date());
+
+            // nama file
+            String fileName = "Laporan_Hasil_Ujian_PORSIGAL_" + tanggal;
+            String[] headers = {
+                "No", "ID Peserta", "Nama Peserta","Status"
+            };
+
+            float[] widths = {1f, 3f, 4f, 3f};
+            formatLaporan(fileName, "Laporan Hasil Ujian PORSIGAL", tanggal, headers, widths, model);
+
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
         }
     }
 }

@@ -87,7 +87,6 @@ public class popUpCariAnggota extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("CARI DATA ANGGOTA");
 
-        t_cari_nama.setText("Cari nama anggota");
         t_cari_nama.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         t_cari_nama.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {

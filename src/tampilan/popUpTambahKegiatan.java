@@ -35,7 +35,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         t_tgl_mulai.setCalendar(null);
         t_tgl_selesai.setCalendar(null);
         t_lokasi.setText(null);
-        c_penguji.setSelectedItem(null);
+        c_penguji.setSelectedItem(0);
     }
 
     String konversiID(String namaPelatih) {
@@ -111,9 +111,6 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         t_lokasi = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         c_penguji = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        t_keterangan = new javax.swing.JTextArea();
         b_simpan = new javax.swing.JButton();
         b_ubah = new javax.swing.JButton();
         b_hapus = new javax.swing.JButton();
@@ -143,13 +140,6 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Penguji");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Keterangan");
-
-        t_keterangan.setColumns(20);
-        t_keterangan.setRows(5);
-        jScrollPane1.setViewportView(t_keterangan);
 
         b_simpan.setBackground(new java.awt.Color(0, 204, 0));
         b_simpan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -218,10 +208,8 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
                                     .addComponent(t_tgl_mulai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(t_tgl_selesai, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(c_penguji, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,11 +251,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(c_penguji, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(144, 144, 144)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_simpan)
                     .addComponent(b_ubah)
@@ -448,15 +432,12 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField t_idUjian;
-    private javax.swing.JTextArea t_keterangan;
     private javax.swing.JTextField t_lokasi;
     private javax.swing.JTextField t_nama;
     private com.toedter.calendar.JDateChooser t_tgl_mulai;
