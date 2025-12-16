@@ -8,8 +8,7 @@ import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 import kelas.koneksi;
 import kelas.KelasUser;
-import frame.popUpTambahUser;
-
+import tampilan.PanelUser;
 /**
  *
  * @author Sukma Nur
