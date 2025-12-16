@@ -80,6 +80,7 @@ public class KelasUser extends koneksi {
         } catch (SQLException e) {
             System.out.println("error loadtable: " + e.getMessage());
             JOptionPane.showMessageDialog(null, "error memuad data");
+            e.printStackTrace();
         }
         return model;
     }
