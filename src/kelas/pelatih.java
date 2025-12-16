@@ -237,12 +237,12 @@ public class pelatih extends koneksi {
         try {
             query = "SELECT p.ID_pelatih, p.nama_pelatih, p.no_hp, s.nama_sabuk, p.sertifikat "
                     + "FROM pelatih p JOIN sabuk s "
-                    + "ON p.ID_sabuk = s.ID_sabuk WHERE p.nama_pelatih=?";
+                    + "ON p.ID_sabuk = s.ID_sabuk WHERE p.nama_pelatih LIKE?";
 
             ps = con.prepareStatement(query);
 
             // Kirim parameter
-            ps.setString(1, namaPelatih);
+            ps.setString(1,"%"+ namaPelatih+"%");
             rs = ps.executeQuery();
 
             int no = 1;

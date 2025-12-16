@@ -262,7 +262,11 @@ public class ujian extends koneksi {
         model.addColumn("Penguji");
 
         try {
-            query = "SELECT * FROM kegiatan WHERE tgl_mulai BETWEEN ? AND ?";
+            query = "SELECT k.ID_kegiatan, k.nama_kegiatan, k.tgl_mulai, k.tgl_selesai, "
+                    + "k.lokasi, p.nama_pelatih "
+                    + "FROM kegiatan k "
+                    + "JOIN pelatih p ON k.penguji = p.ID_pelatih "
+                    + "WHERE k.tgl_mulai BETWEEN ? AND ?";
 
             ps = con.prepareStatement(query);
             // Convert java.util.Date → java.sql.Date
@@ -284,7 +288,7 @@ public class ujian extends koneksi {
                     rs.getString("tgl_mulai"),
                     rs.getString("tgl_selesai"),
                     rs.getString("lokasi"),
-                    rs.getString("pelatih")
+                    rs.getString("nama_pelatih")
                 });
             }
         } catch (SQLException e) {
