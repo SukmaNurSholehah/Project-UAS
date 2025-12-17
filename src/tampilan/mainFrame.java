@@ -7,6 +7,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import kelas.sesion;
 /**
  *
  * @author Sukma Nur
@@ -22,6 +23,11 @@ public class mainFrame extends javax.swing.JFrame {
         pnSubMenuJadwal.setVisible(false);
         pnSubMenuEvent.setVisible(false);
         pnSubMenuPengaturan.setVisible(false);
+        
+        content.removeAll();
+        content.add(new panelDashboard());
+        content.repaint();
+        content.revalidate();   
     }
 
     /**
@@ -705,19 +711,21 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void bLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLogoutActionPerformed
         // TODO add your handling code here:
-        String judul = "Konfirmasi";
-        String pesan = "Apakah Anda yakin ingin keluar";
-        int optionType = JOptionPane.YES_NO_OPTION;
-        int messageType = JOptionPane.QUESTION_MESSAGE;
-
+         String judul = "Konfirmasi";
+        String pesan = "Apakah Anda yakin ingin logout?";
         int pilihan = JOptionPane.showConfirmDialog(
-            this, pesan, judul, optionType, messageType);
-        if (pilihan == JOptionPane.YES_OPTION){
-            System.exit(0);
-        } else if(pilihan == JOptionPane.NO_OPTION){
-            System.out.println("User clicked No - Staying logged in.");
-        } else if(pilihan == JOptionPane.CLOSED_OPTION){
-            System.out.println("Dialog closed without selection.");
+                this,
+                pesan,
+                judul,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (pilihan == JOptionPane.YES_OPTION) {
+            sesion.clear();
+            this.dispose();
+            new login().setVisible(true);   
+                             
         }
     }//GEN-LAST:event_bLogoutActionPerformed
 

@@ -28,9 +28,8 @@ public class popUpTambahUser extends javax.swing.JFrame {
      */
     public popUpTambahUser(PanelUser tUser) {
         initComponents();
-        this.tUser = this.tUser;
+        this.tUser = tUser;
 
-        PanelUser user = new PanelUser();
     }
 
     public void tampilanTambah() {

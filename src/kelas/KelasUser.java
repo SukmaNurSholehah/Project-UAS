@@ -118,7 +118,7 @@ public class KelasUser extends koneksi {
     }
 
     public void simpandata() {
-        query = "INSERT INTO user VALUES (?, ?, ?)";
+        query = "INSERT INTO user (username, full_name, password) VALUES (?, ?, MD5(?))";
 
         try {
             ps = cn.prepareStatement(query);
@@ -148,4 +148,27 @@ public class KelasUser extends koneksi {
 
         }
     }
+    
+    public boolean login(String username, String password) {
+    try {
+        String sql = "SELECT * FROM user WHERE username=? AND password=MD5(?)";
+        
+        koneksi k = new koneksi();
+        Connection con = k.configDB(); // ⬅ BENAR
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, username);
+        ps.setString(2, password);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            sesion.setUsername(rs.getString("username"));
+            sesion.setFullName(rs.getString("full_name"));
+            return true;
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage());
+    }
+    return false;
+}
 }
