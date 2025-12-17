@@ -51,7 +51,7 @@ public class popUpTambahUser extends javax.swing.JFrame {
 
     public void tampilData(String username, String fullname) {
         tUsername.setText(username);
-        tPassword.setText(fullname);
+        tFullname.setText(fullname);
     }
 
     /**
