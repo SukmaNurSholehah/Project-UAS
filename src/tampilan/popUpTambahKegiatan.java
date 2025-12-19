@@ -53,6 +53,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
 
@@ -206,6 +207,7 @@ public class popUpTambahKegiatan extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void t_lokasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_lokasiActionPerformed

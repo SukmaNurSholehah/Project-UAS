@@ -44,6 +44,7 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         lbNamaKegiatan = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         pn_dasar.setBackground(new java.awt.Color(250, 240, 230));
         pn_dasar.setPreferredSize(new java.awt.Dimension(484, 539));
@@ -197,6 +198,7 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void t_namaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_namaActionPerformed
