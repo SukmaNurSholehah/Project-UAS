@@ -4,18 +4,28 @@
  */
 package tampilan;
 
+
+
 /**
  *
  * @author Sukma Nur
  */
 public class popUpDetailRiwayat extends javax.swing.JFrame {
+   
+    
 
     /**
      * Creates new form popUpDetailRiwayat
      */
     public popUpDetailRiwayat() {
         initComponents();
+        
     }
+    
+     
+    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,9 +43,9 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
         tLokasi = new javax.swing.JTextField();
         tPelatih = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jTriwayt = new javax.swing.JTable();
+        bExpor = new javax.swing.JButton();
+        bKembali = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,7 +71,7 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
         tPelatih.setBackground(new java.awt.Color(204, 204, 204));
         tPelatih.setBorder(javax.swing.BorderFactory.createTitledBorder("Pelatih"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTriwayt.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -72,15 +82,25 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTriwayt);
 
-        jButton1.setBackground(new java.awt.Color(255, 0, 0));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Expor PDF");
+        bExpor.setBackground(new java.awt.Color(255, 0, 0));
+        bExpor.setForeground(new java.awt.Color(255, 255, 255));
+        bExpor.setText("Expor PDF");
+        bExpor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExporActionPerformed(evt);
+            }
+        });
 
-        jButton2.setBackground(new java.awt.Color(51, 204, 0));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Kembali");
+        bKembali.setBackground(new java.awt.Color(51, 204, 0));
+        bKembali.setForeground(new java.awt.Color(255, 255, 255));
+        bKembali.setText("Kembali");
+        bKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bKembaliActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,9 +113,9 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(bExpor)
                         .addGap(51, 51, 51)
-                        .addComponent(jButton2))
+                        .addComponent(bKembali))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(15, 15, 15)
@@ -127,8 +147,8 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(bExpor)
+                    .addComponent(bKembali))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -149,6 +169,17 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
     private void jIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jIDActionPerformed
+
+    private void bExporActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExporActionPerformed
+        // TODO add your handling code here:
+         
+
+    }//GEN-LAST:event_bExporActionPerformed
+
+    private void bKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bKembaliActionPerformed
+      // TODO add your handling code here:
+        
+    }//GEN-LAST:event_bKembaliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,14 +220,14 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton bExpor;
+    private javax.swing.JButton bKembali;
     private javax.swing.JTextField jID;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTanggal;
+    private javax.swing.JTable jTriwayt;
     private javax.swing.JTextField tLokasi;
     private javax.swing.JTextField tPelatih;
     // End of variables declaration//GEN-END:variables

@@ -76,7 +76,7 @@
                               <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="cNamaSabuk" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jTahunGabung" alignment="0" min="-2" pref="290" max="-2" attributes="0"/>
+                                  <Component id="jTanggalGabung" alignment="0" min="-2" pref="290" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -121,7 +121,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTahunGabung" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTanggalGabung" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -158,6 +158,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Simpan"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jSimpanActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jHapus">
           <Properties>
@@ -169,6 +172,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Hapus"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jHapusActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jUbah">
           <Properties>
@@ -191,6 +197,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Kembali"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jKembaliActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -237,7 +246,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tahun Gabung"/>
+            <Property name="text" type="java.lang.String" value="Tanggal Gabung"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
@@ -265,7 +274,10 @@
         <Component class="javax.swing.JComboBox" name="cJenisKelamin">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+              <StringArray count="2">
+                <StringItem index="0" value="Laki-Laki"/>
+                <StringItem index="1" value="Perempuan"/>
+              </StringArray>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[72, 35]"/>
@@ -285,7 +297,10 @@
         <Component class="javax.swing.JComboBox" name="cStatus">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+              <StringArray count="2">
+                <StringItem index="0" value="Warga"/>
+                <StringItem index="1" value="Siswa"/>
+              </StringArray>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[72, 35]"/>
@@ -295,7 +310,7 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="jTahunGabung">
+        <Component class="com.toedter.calendar.JDateChooser" name="jTanggalGabung">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[88, 35]"/>
@@ -308,6 +323,9 @@
               <StringArray count="0"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cNamaSabukActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

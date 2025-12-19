@@ -4,17 +4,112 @@
  */
 package tampilan;
 
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import java.awt.Color;
+import kelas.Sabuk;
+import kelas.anggota;
+import kelas.koneksi;
+
 /**
  *
  * @author Sukma Nur
  */
 public class popUpDataAnggota extends javax.swing.JFrame {
 
+    String idSabukTerpilih;
+
     /**
      * Creates new form popUpDataAnggota
      */
-    public popUpDataAnggota() {
+    private panelAnggota panel_anggota;
+
+    public popUpDataAnggota(panelAnggota FpanelAnggota) {
         initComponents();
+        loadSabuk();
+        this.panel_anggota = FpanelAnggota;
+        
+        //jTanggalGabung.setMinSelectableDate(null);
+        //jTanggalGabung.setMaxSelectableDate(null);
+        //jTanggalGabung.getDateEditor().getUiComponent().setForeground(Color.BLACK);
+
+        Sabuk sb = new Sabuk();
+        sb.comboSabuk(cNamaSabuk);
+
+        anggota ag = new anggota();
+        ag.autoID(tIDAnggota);
+    }
+
+    public void setData(String id, String nama, String ttl, String jenis_kelamin,
+            String status, String tahun_gabung, String sabuk) {
+        tIDAnggota.setText(id);
+        tNamaAnggota.setText(nama);
+
+        //cek isi jk
+        if ("L".equals(jenis_kelamin)) {
+            cJenisKelamin.setSelectedItem("Laki-Laki");
+        } else if ("P".equals(jenis_kelamin)) {
+            cJenisKelamin.setSelectedItem("Perempuan");
+        }
+
+        cStatus.setSelectedItem(status);
+        jTanggalGabung.setMinSelectableDate(new Date());// jika disable tanggal sblm harii ini
+        cNamaSabuk.setSelectedItem(sabuk);
+
+        // Format tanggal sesuai yang disimpan di database
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            if (ttl != null && !ttl.isEmpty()) {
+                Date dateMulai = sdf.parse(ttl);
+                jTanggalLahir.setDate(dateMulai);
+            } else {
+                jTanggalLahir.setDate(null);
+            }
+
+            if (tahun_gabung != null && !tahun_gabung.isEmpty()) {
+                Date dateAkhir = sdf.parse(tahun_gabung);
+                jTanggalGabung.setDate(dateAkhir);
+            } else {
+                jTanggalGabung.setDate(null);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Jika parsing gagal, kosongkan JDateChooser agar tidak error
+            jTanggalLahir.setDate(null);
+            jTanggalGabung.setDate(null);
+        }
+    }
+
+    public void modeTambah() {
+        jUbah.setVisible(false);
+        jHapus.setVisible(false);
+    }
+
+    public void modeEdit() {
+        jSimpan.setVisible(false);
+    }
+
+    public void loadSabuk() {
+        try {
+            Connection conn = new koneksi().configDB();
+            String sql = "SELECT ID_sabuk, nama_sabuk FROM sabuk";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            cNamaSabuk.removeAllItems();
+            while (rs.next()) {
+                cNamaSabuk.addItem(rs.getString("nama_sabuk"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     /**
@@ -44,7 +139,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         cJenisKelamin = new javax.swing.JComboBox<>();
         jTanggalLahir = new com.toedter.calendar.JDateChooser();
         cStatus = new javax.swing.JComboBox<>();
-        jTahunGabung = new com.toedter.calendar.JDateChooser();
+        jTanggalGabung = new com.toedter.calendar.JDateChooser();
         cNamaSabuk = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,10 +153,20 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         jSimpan.setBackground(new java.awt.Color(51, 102, 255));
         jSimpan.setForeground(new java.awt.Color(255, 255, 255));
         jSimpan.setText("Simpan");
+        jSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSimpanActionPerformed(evt);
+            }
+        });
 
         jHapus.setBackground(new java.awt.Color(204, 0, 51));
         jHapus.setForeground(new java.awt.Color(255, 255, 255));
         jHapus.setText("Hapus");
+        jHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jHapusActionPerformed(evt);
+            }
+        });
 
         jUbah.setBackground(new java.awt.Color(255, 153, 51));
         jUbah.setText("Ubah");
@@ -74,6 +179,11 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         jKembali.setBackground(new java.awt.Color(153, 153, 153));
         jKembali.setForeground(new java.awt.Color(255, 255, 255));
         jKembali.setText("Kembali");
+        jKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jKembaliActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("ID");
@@ -91,7 +201,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         jLabel6.setText("Status");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel7.setText("Tahun Gabung");
+        jLabel7.setText("Tanggal Gabung");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel8.setText("Nama Sabuk");
@@ -100,13 +210,21 @@ public class popUpDataAnggota extends javax.swing.JFrame {
 
         tNamaAnggota.setPreferredSize(new java.awt.Dimension(64, 35));
 
+        cJenisKelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-Laki", "Perempuan" }));
         cJenisKelamin.setPreferredSize(new java.awt.Dimension(72, 35));
 
         jTanggalLahir.setPreferredSize(new java.awt.Dimension(88, 35));
 
+        cStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Warga", "Siswa" }));
         cStatus.setPreferredSize(new java.awt.Dimension(72, 35));
 
-        jTahunGabung.setPreferredSize(new java.awt.Dimension(88, 35));
+        jTanggalGabung.setPreferredSize(new java.awt.Dimension(88, 35));
+
+        cNamaSabuk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cNamaSabukActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -139,7 +257,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(cNamaSabuk, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTahunGabung, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jTanggalGabung, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jUbah)
@@ -177,7 +295,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTahunGabung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTanggalGabung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -208,7 +326,121 @@ public class popUpDataAnggota extends javax.swing.JFrame {
 
     private void jUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUbahActionPerformed
         // TODO add your handling code here:
+        anggota ang = new anggota();
+
+        ang.setId_anggota(tIDAnggota.getText());
+        ang.setNama_anggota(tNamaAnggota.getText());
+        ang.setStatus(cStatus.getSelectedItem().toString());
+        String jk;
+        if (cJenisKelamin.getSelectedItem().toString().equals("Laki-Laki")) {
+            jk = "L";
+        } else {
+            jk = "P";
+        }
+        ang.setJenis_kelamin(jk);
+
+        Date tglLahir = jTanggalLahir.getDate();
+        String tglLahirDate = null;
+        if (tglLahir != null) {
+            tglLahirDate = new SimpleDateFormat("yyyy-MM-dd").format(tglLahir);
+        }
+        ang.setTgl_lahir(tglLahirDate);
+
+        Date tanggalGab = jTanggalGabung.getDate();
+        String tanggalGabDate = null;
+        if (tanggalGab != null) {
+            tanggalGabDate = new SimpleDateFormat("yyyy-MM-dd").format(tanggalGab);
+        }
+        ang.setTgl_gabung(tanggalGabDate);
+
+        ang.setId_sabuk(idSabukTerpilih);
+
+        ang.ubahanggota();
+
+        if (panel_anggota != null) {
+            panel_anggota.tampildataanggota();
+        }
+        dispose();
+
+
     }//GEN-LAST:event_jUbahActionPerformed
+
+    private void jSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSimpanActionPerformed
+        // TODO add your handling code here:
+        anggota ang = new anggota();
+        ang.setId_anggota(tIDAnggota.getText());
+        ang.setNama_anggota(tNamaAnggota.getText());
+        String jk;
+        if (cJenisKelamin.getSelectedItem().toString().equals("Laki-Laki")) {
+            jk = "L";
+        } else {
+            jk = "P";
+        }
+        ang.setJenis_kelamin(jk);
+
+        ang.setStatus(cStatus.getSelectedItem().toString());
+
+        Date tglLahir = jTanggalLahir.getDate();
+        String tglLahirDate = null;
+        if (tglLahir != null) {
+            tglLahirDate = new SimpleDateFormat("yyyy-MM-dd").format(tglLahir);
+        }
+        ang.setTgl_lahir(tglLahirDate);
+
+        Date tanggalGab = jTanggalGabung.getDate();
+        String tanggalGabDate = null;
+        if (tanggalGab != null) {
+            tanggalGabDate = new SimpleDateFormat("yyyy-MM-dd").format(tanggalGab);
+        }
+        ang.setTgl_gabung(tanggalGabDate);
+
+        ang.setId_sabuk(idSabukTerpilih);
+
+        ang.tambahanggota();
+        if (panel_anggota != null) {
+            panel_anggota.tampildataanggota();
+        }
+        dispose();
+
+    }//GEN-LAST:event_jSimpanActionPerformed
+
+    private void jKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jKembaliActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jKembaliActionPerformed
+
+    private void jHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHapusActionPerformed
+        // TODO add your handling code here:
+        anggota ang = new anggota();
+        ang.setId_anggota(tIDAnggota.getText());
+
+        ang.hapusanggota();
+        if (panel_anggota != null) {
+            panel_anggota.tampildataanggota();
+        }
+        dispose();
+
+    }//GEN-LAST:event_jHapusActionPerformed
+
+    private void cNamaSabukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cNamaSabukActionPerformed
+        // TODO add your handling code here:
+        try {
+            String nama = cNamaSabuk.getSelectedItem().toString();
+
+            Connection conn = new koneksi().configDB();
+            String sql = "SELECT ID_sabuk FROM sabuk WHERE nama_sabuk=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, nama);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                idSabukTerpilih = rs.getString("ID_sabuk");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
+    }//GEN-LAST:event_cNamaSabukActionPerformed
 
     /**
      * @param args the command line arguments
@@ -241,11 +473,11 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpDataAnggota().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUpDataAnggota().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -264,7 +496,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jSimpan;
-    private com.toedter.calendar.JDateChooser jTahunGabung;
+    private com.toedter.calendar.JDateChooser jTanggalGabung;
     private com.toedter.calendar.JDateChooser jTanggalLahir;
     private javax.swing.JButton jUbah;
     private javax.swing.JTextField tIDAnggota;

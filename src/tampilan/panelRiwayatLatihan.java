@@ -4,18 +4,22 @@
  */
 package tampilan;
 
+
 /**
  *
  * @author Sukma Nur
  */
 public class panelRiwayatLatihan extends javax.swing.JPanel {
 
+
     /**
      * Creates new form panelRiwayatLatihan
      */
     public panelRiwayatLatihan() {
         initComponents();
+       
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +34,7 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTriwayat = new javax.swing.JTable();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
@@ -45,7 +49,7 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Tabel Riwayat Latihan");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTriwayat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -56,7 +60,12 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTriwayat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTriwayatMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTriwayat);
 
         jLabel3.setText("Tanggal Awal");
 
@@ -119,6 +128,12 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTriwayatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTriwayatMouseClicked
+        // TODO add your handling code here:
+        
+
+    }//GEN-LAST:event_jTriwayatMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -129,6 +144,6 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTriwayat;
     // End of variables declaration//GEN-END:variables
 }

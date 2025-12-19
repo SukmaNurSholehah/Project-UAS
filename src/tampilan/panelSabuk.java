@@ -4,17 +4,31 @@
  */
 package tampilan;
 
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import kelas.Sabuk;
+
 /**
  *
  * @author Sukma Nur
  */
 public class panelSabuk extends javax.swing.JPanel {
 
+    Sabuk sbk = new Sabuk();
+
     /**
      * Creates new form panelSabuk
      */
     public panelSabuk() {
         initComponents();
+        tampilData();
+        sbk.autoID(tIDSabuk);
+    }
+
+    public void tampilData() {
+        DefaultTableModel model = sbk.tampil();
+        jTsabuk.setModel(model);
     }
 
     /**
@@ -32,14 +46,14 @@ public class panelSabuk extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         tIDSabuk = new javax.swing.JTextField();
-        tNamaSabuk = new javax.swing.JTextField();
         cTingkat = new javax.swing.JComboBox<>();
         bSimpan = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
         bReset = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTsabuk = new javax.swing.JTable();
+        jTnamsabuk = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(250, 240, 230));
 
@@ -70,13 +84,7 @@ public class panelSabuk extends javax.swing.JPanel {
             }
         });
 
-        tNamaSabuk.setPreferredSize(new java.awt.Dimension(64, 35));
-        tNamaSabuk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tNamaSabukActionPerformed(evt);
-            }
-        });
-
+        cTingkat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRAPTA", "KAWI", "GLADHI", "WIRA", "MANGGALA", "PURUSA" }));
         cTingkat.setPreferredSize(new java.awt.Dimension(72, 35));
 
         bSimpan.setText("Simpan");
@@ -107,7 +115,7 @@ public class panelSabuk extends javax.swing.JPanel {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTsabuk.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -118,7 +126,12 @@ public class panelSabuk extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTsabuk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTsabukMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTsabuk);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -136,7 +149,7 @@ public class panelSabuk extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tIDSabuk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cTingkat, 0, 274, Short.MAX_VALUE)
-                            .addComponent(tNamaSabuk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jTnamsabuk)))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(252, 252, 252)
@@ -169,11 +182,11 @@ public class panelSabuk extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cTingkat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tNamaSabuk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                    .addComponent(jTnamsabuk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bSimpan)
                     .addComponent(bUbah)
@@ -204,25 +217,55 @@ public class panelSabuk extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tIDSabukActionPerformed
 
-    private void tNamaSabukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNamaSabukActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tNamaSabukActionPerformed
-
     private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
         // TODO add your handling code here:
+        sbk.setIdSabuk(tIDSabuk.getText());
+        sbk.setNamaSabuk(jTnamsabuk.getText());
+        sbk.setTingkatan(cTingkat.getSelectedItem().toString());
+
+        sbk.tambah();
+
+        tampilData();
+        sbk.autoID(tIDSabuk);
+
     }//GEN-LAST:event_bSimpanActionPerformed
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
         // TODO add your handling code here:
+        sbk.setIdSabuk(tIDSabuk.getText());
+        sbk.setNamaSabuk(cTingkat.getSelectedItem().toString());
+        sbk.setTingkatan(jTnamsabuk.getText());
+
+        sbk.ubah();
+        tampilData();
     }//GEN-LAST:event_bUbahActionPerformed
 
     private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
         // TODO add your handling code here:
+        sbk.setIdSabuk(tIDSabuk.getText());
+
+        sbk.hapus();
+        tampilData();
+
     }//GEN-LAST:event_bHapusActionPerformed
 
     private void bResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResetActionPerformed
         // TODO add your handling code here:
+        cTingkat.setSelectedIndex(0);
+        jTnamsabuk.setText("");
+        sbk.autoID(tIDSabuk);
+
+
     }//GEN-LAST:event_bResetActionPerformed
+
+    private void jTsabukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTsabukMouseClicked
+        // TODO add your handling code here:
+        int row = jTsabuk.getSelectedRow();
+        tIDSabuk.setText(jTsabuk.getValueAt(row, 1).toString());
+        jTnamsabuk.setText(jTsabuk.getValueAt(row, 2).toString());
+        cTingkat.setSelectedItem(jTsabuk.getValueAt(row, 3).toString());
+
+    }//GEN-LAST:event_jTsabukMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -237,8 +280,8 @@ public class panelSabuk extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTnamsabuk;
+    private javax.swing.JTable jTsabuk;
     private javax.swing.JTextField tIDSabuk;
-    private javax.swing.JTextField tNamaSabuk;
     // End of variables declaration//GEN-END:variables
 }
