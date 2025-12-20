@@ -156,7 +156,7 @@ public class panelAnggota extends javax.swing.JPanel {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
-       popUpDataAnggota p = new popUpDataAnggota(this);
+        popUpDataAnggota p = new popUpDataAnggota(this);
         p.setVisible(true);
         p.modeTambah(); // kasih tahu popup bahwa ini mode "tambah"
     }//GEN-LAST:event_bTambahActionPerformed
@@ -168,7 +168,10 @@ public class panelAnggota extends javax.swing.JPanel {
 
     private void tblDataAnggotaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataAnggotaMouseClicked
         // TODO add your handling code here:
-         int row = tblDataAnggota.getSelectedRow();
+        popUpDataAnggota p = new popUpDataAnggota(this);
+        p.setVisible(true);
+        p.modeEdit();
+        int row = tblDataAnggota.getSelectedRow();
         if( row == -1){
             JOptionPane.showMessageDialog(this, "pilih data dulu");
             return;
@@ -182,9 +185,6 @@ public class panelAnggota extends javax.swing.JPanel {
         String thn_gabung = tblDataAnggota.getValueAt(row, 6).toString();
         String nama_sabuk =tblDataAnggota.getValueAt(row, 7).toString();
         
-
-        popUpDataAnggota p = new popUpDataAnggota(this);
-       
         p.setData(id,nama,tgl_lahir,jk,status,thn_gabung,nama_sabuk);
         p.setLocationRelativeTo(null);
         p.setVisible(true);
@@ -193,7 +193,7 @@ public class panelAnggota extends javax.swing.JPanel {
 
     private void jTcariAnggotaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTcariAnggotaKeyReleased
         // TODO add your handling code here:
-         anggota ang = new anggota();
+        anggota ang = new anggota();
         DefaultTableModel model = ang.filterTable(jTcariAnggota.getText());
         tblDataAnggota.setModel(model);
 
