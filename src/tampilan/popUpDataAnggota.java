@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import tampilan.panelAnggota;
 import kelas.Sabuk;
 import kelas.anggota;
 import kelas.koneksi;
@@ -33,10 +34,6 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         initComponents();
         loadSabuk();
         this.panel_anggota = FpanelAnggota;
-        
-        //jTanggalGabung.setMinSelectableDate(null);
-        //jTanggalGabung.setMaxSelectableDate(null);
-        //jTanggalGabung.getDateEditor().getUiComponent().setForeground(Color.BLACK);
 
         Sabuk sb = new Sabuk();
         sb.comboSabuk(cNamaSabuk);
@@ -90,10 +87,13 @@ public class popUpDataAnggota extends javax.swing.JFrame {
     public void modeTambah() {
         jUbah.setVisible(false);
         jHapus.setVisible(false);
+        jSimpan.setVisible(true);
     }
 
     public void modeEdit() {
         jSimpan.setVisible(false);
+        jUbah.setVisible(true);
+        jHapus.setVisible(true);
     }
 
     public void loadSabuk() {
@@ -328,6 +328,8 @@ public class popUpDataAnggota extends javax.swing.JFrame {
 
     private void jUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUbahActionPerformed
         // TODO add your handling code here:
+        
+        
         anggota ang = new anggota();
 
         ang.setId_anggota(tIDAnggota.getText());
@@ -362,6 +364,8 @@ public class popUpDataAnggota extends javax.swing.JFrame {
         if (panel_anggota != null) {
             panel_anggota.tampildataanggota();
         }
+        setVisible(true);
+        modeEdit();
         dispose();
 
 
@@ -369,6 +373,7 @@ public class popUpDataAnggota extends javax.swing.JFrame {
 
     private void jSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSimpanActionPerformed
         // TODO add your handling code here:
+
         anggota ang = new anggota();
         ang.setId_anggota(tIDAnggota.getText());
         ang.setNama_anggota(tNamaAnggota.getText());

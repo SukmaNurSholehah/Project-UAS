@@ -81,7 +81,6 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAbsensi = new javax.swing.JTable();
-        bExpor = new javax.swing.JButton();
         bKembali = new javax.swing.JButton();
         txtID = new javax.swing.JLabel();
         txtTanggal = new javax.swing.JLabel();
@@ -108,10 +107,6 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(tblAbsensi);
-
-        bExpor.setBackground(new java.awt.Color(255, 0, 0));
-        bExpor.setForeground(new java.awt.Color(255, 255, 255));
-        bExpor.setText("Expor PDF");
 
         bKembali.setBackground(new java.awt.Color(51, 204, 0));
         bKembali.setForeground(new java.awt.Color(255, 255, 255));
@@ -156,8 +151,6 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bExpor)
-                .addGap(76, 76, 76)
                 .addComponent(bKembali)
                 .addGap(44, 44, 44))
         );
@@ -176,9 +169,7 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bKembali)
-                    .addComponent(bExpor))
+                .addComponent(bKembali)
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
@@ -208,7 +199,6 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bExpor;
     private javax.swing.JButton bKembali;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

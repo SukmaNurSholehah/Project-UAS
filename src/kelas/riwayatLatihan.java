@@ -19,18 +19,18 @@ import kelas.jadwal;
  * @author Sukma Nur
  */
 public class riwayatLatihan extends koneksi {
-    
+
     private Date tglLatihan;
     private String lokasiLatihan, keteranganLatihan;
-    
-    private final Connection koneksi ;
+
+    private final Connection koneksi;
     private PreparedStatement ps;
     private Statement st;
     private ResultSet rs;
     private String query;
-    
-    public riwayatLatihan(){
-      koneksi = super.configDB();
+
+    public riwayatLatihan() {
+        koneksi = super.configDB();
     }
 
     public Date getTglLatihan() {
@@ -56,7 +56,8 @@ public class riwayatLatihan extends koneksi {
     public void setKeteranganLatihan(String keteranganLatihan) {
         this.keteranganLatihan = keteranganLatihan;
     }
-     public void tampilRiwayatLatihan(JTable tabel) {
+
+    public void tampilRiwayatLatihan(JTable tabel) {
         DefaultTableModel model = new DefaultTableModel();
 
         model.addColumn("ID");
@@ -85,16 +86,48 @@ public class riwayatLatihan extends koneksi {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-     }
-     
-     public ResultSet getAbsensiTidakHadir(String idJadwal) {
+    }
+
+    public DefaultTableModel tampilTidakHadir(String idJadwal) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("Nama Anggota");
+        model.addColumn("Kehadiran");
+
+        try {
+            String sql = "SELECT a.nama_anggota "
+                    + "FROM absensi_latihan al "
+                    + "JOIN anggota a ON al.ID_anggota = a.ID_anggota "
+                    + "WHERE al.ID_jadwal = ? AND al.kehadiran = 'Tidak Hadir'";
+
+            PreparedStatement ps = koneksi.prepareStatement(sql);
+            ps.setString(1, idJadwal);
+            ResultSet rs = ps.executeQuery();
+
+            int no = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    rs.getString("nama_anggota"),
+                    "Tidak Hadir"
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        return model;
+    }
+
+    public ResultSet getAbsensiTidakHadir(String idJadwal) {
         ResultSet rs = null;
         try {
-            String sql =
-                "SELECT a.nama_anggota " +
-                "FROM absensi_latihan al " +
-                "JOIN anggota a ON al.ID_anggota = a.ID_anggota " +
-                "WHERE al.hadir = 0 AND al.ID_jadwal = ?";
+            String sql
+                    = "SELECT a.nama_anggota "
+                    + "FROM absensi_latihan al "
+                    + "JOIN anggota a ON al.ID_anggota = a.ID_anggota "
+                    + "WHERE al.hadir = 0 AND al.ID_jadwal = ?";
 
             PreparedStatement ps = koneksi.prepareStatement(sql);
             ps.setString(1, idJadwal); // ✅ SEKARANG MASUK AKAL
@@ -106,4 +139,3 @@ public class riwayatLatihan extends koneksi {
         return rs;
     }
 }
-
