@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
+import javax.swing.JOptionPane;
+import kelas.riwayatLatihan;
+import tampilan.popUpDetailRiwayat;
 
 /**
  *
@@ -15,6 +18,8 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
      */
     public panelRiwayatLatihan() {
         initComponents();
+         riwayatLatihan rl = new riwayatLatihan();
+         rl.tampilRiwayatLatihan(tblRiwayatLatihan);
     }
 
     /**
@@ -30,7 +35,7 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblRiwayatLatihan = new javax.swing.JTable();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
@@ -45,7 +50,7 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Tabel Riwayat Latihan");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblRiwayatLatihan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -56,7 +61,12 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblRiwayatLatihan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblRiwayatLatihanMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblRiwayatLatihan);
 
         jLabel3.setText("Tanggal Awal");
 
@@ -119,6 +129,21 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tblRiwayatLatihanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatLatihanMouseClicked
+        // TODO add your handling code here:
+            int baris = tblRiwayatLatihan.getSelectedRow();
+
+          if (baris != -1) {
+              String id      = tblRiwayatLatihan.getValueAt(baris, 0).toString();
+              String tanggal = tblRiwayatLatihan.getValueAt(baris, 1).toString();
+              String lokasi  = tblRiwayatLatihan.getValueAt(baris, 2).toString();
+              String pelatih = tblRiwayatLatihan.getValueAt(baris, 3).toString();
+
+              new popUpDetailRiwayat(
+                  id, tanggal, lokasi, pelatih).setVisible(true);
+          }
+    }//GEN-LAST:event_tblRiwayatLatihanMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -129,6 +154,6 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblRiwayatLatihan;
     // End of variables declaration//GEN-END:variables
 }

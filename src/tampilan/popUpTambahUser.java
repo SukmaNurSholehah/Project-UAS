@@ -4,17 +4,53 @@
  */
 package tampilan;
 
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import kelas.koneksi;
+import kelas.KelasUser;
+
 /**
  *
  * @author Sukma Nur
  */
 public class popUpTambahUser extends javax.swing.JFrame {
 
+    private KelasUser user = new KelasUser();
+    private PanelUser tUser;
+
     /**
      * Creates new form popUpTambahUser
      */
-    public popUpTambahUser() {
+    public popUpTambahUser(PanelUser tUser) {
         initComponents();
+        this.tUser = tUser;
+
+    }
+
+    public void tampilanTambah() {
+        jUbah.setVisible(false);
+        jHapus.setVisible(false);
+    }
+
+    public void tampilanEdit() {
+        jSimpan.setVisible(false);
+        tUsername.setEditable(false);
+    }
+
+    private void reset() {
+        tUsername.setText("");
+        tFullname.setText("");
+        tPassword.setText("");
+    }
+
+    public void tampilData(String username, String fullname) {
+        tUsername.setText(username);
+        tFullname.setText(fullname);
     }
 
     /**
@@ -56,10 +92,20 @@ public class popUpTambahUser extends javax.swing.JFrame {
         jSimpan.setBackground(new java.awt.Color(51, 102, 255));
         jSimpan.setForeground(new java.awt.Color(255, 255, 255));
         jSimpan.setText("Simpan");
+        jSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSimpanActionPerformed(evt);
+            }
+        });
 
         jHapus.setBackground(new java.awt.Color(204, 0, 51));
         jHapus.setForeground(new java.awt.Color(255, 255, 255));
         jHapus.setText("Hapus");
+        jHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jHapusActionPerformed(evt);
+            }
+        });
 
         jUbah.setBackground(new java.awt.Color(255, 153, 51));
         jUbah.setText("Ubah");
@@ -141,7 +187,43 @@ public class popUpTambahUser extends javax.swing.JFrame {
 
     private void jUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUbahActionPerformed
         // TODO add your handling code here:
+        user.setUsername(tUsername.getText());
+        user.setFull_name(tFullname.getText());
+        user.setPassword(tPassword.getText());
+
+        user.ubahdata();
+        if (tUser != null) {
+            tUser.load_table();
+        }
+        reset();
+        dispose();
     }//GEN-LAST:event_jUbahActionPerformed
+
+    private void jSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSimpanActionPerformed
+        // TODO add your handling code here:
+        user.setUsername(tUsername.getText());
+        user.setFull_name(tFullname.getText());
+        user.setPassword(tPassword.getText());
+
+        user.simpandata();
+        if (tUser != null) {
+            tUser.load_table();
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_jSimpanActionPerformed
+
+    private void jHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jHapusActionPerformed
+        // TODO add your handling code here:
+        user.setUsername(tUsername.getText());
+
+        user.hapusdata();
+        if (tUser != null) {
+            tUser.load_table();
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_jHapusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,11 +256,11 @@ public class popUpTambahUser extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpTambahUser().setVisible(true);
-            }
-        });
+        //       java.awt.EventQueue.invokeLater(new Runnable() {
+        //           public void run() {
+        //               new popUpTambahUser().setVisible(true);
+        //           }
+        //       });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

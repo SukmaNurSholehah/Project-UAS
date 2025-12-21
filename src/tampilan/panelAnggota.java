@@ -3,20 +3,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import kelas.Sabuk;
+import kelas.anggota;
+import java.sql.ResultSet;
+
+
 
 /**
  *
  * @author Sukma Nur
  */
 public class panelAnggota extends javax.swing.JPanel {
-
+    String idSabukTerpilih;
+  
     /**
      * Creates new form panelAnggota
      */
     public panelAnggota() {
         initComponents();
+        tampildataanggota();
+        
+    }
+    
+    
+     public void tampildataanggota(){
+        anggota ag = new anggota();
+        DefaultTableModel model = ag.showanggota();
+        tblDataAnggota.setModel(model);
     }
 
+      public String konversiIDSabuk(String namasabuk){
+        Sabuk sbk = new Sabuk();
+        return sbk.konversIDSabuk(namasabuk);
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +53,7 @@ public class panelAnggota extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         bTambah = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jTcariAnggota = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDataAnggota = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -45,11 +70,15 @@ public class panelAnggota extends javax.swing.JPanel {
             }
         });
 
-        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField1.setText("Cari Anggota");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jTcariAnggota.setBackground(new java.awt.Color(204, 204, 204));
+        jTcariAnggota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                jTcariAnggotaActionPerformed(evt);
+            }
+        });
+        jTcariAnggota.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTcariAnggotaKeyReleased(evt);
             }
         });
 
@@ -65,6 +94,11 @@ public class panelAnggota extends javax.swing.JPanel {
                 "ID Anggota", "Nama Anggota", "Tanggal Lahir ", "Status", "Tahun Gabung"
             }
         ));
+        tblDataAnggota.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDataAnggotaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDataAnggota);
 
         jLabel2.setBackground(new java.awt.Color(250, 240, 230));
@@ -82,16 +116,16 @@ public class panelAnggota extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(bTambah)
                         .addGap(61, 61, 61)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTcariAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 896, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 896, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,12 +134,12 @@ public class panelAnggota extends javax.swing.JPanel {
                 .addGap(47, 47, 47)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bTambah)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTcariAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -122,11 +156,49 @@ public class panelAnggota extends javax.swing.JPanel {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
+        popUpDataAnggota p = new popUpDataAnggota(this);
+        p.setVisible(true);
+        p.modeTambah(); // kasih tahu popup bahwa ini mode "tambah"
     }//GEN-LAST:event_bTambahActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTcariAnggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTcariAnggotaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        
+    }//GEN-LAST:event_jTcariAnggotaActionPerformed
+
+    private void tblDataAnggotaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataAnggotaMouseClicked
+        // TODO add your handling code here:
+        popUpDataAnggota p = new popUpDataAnggota(this);
+        p.setVisible(true);
+        p.modeEdit();
+        int row = tblDataAnggota.getSelectedRow();
+        if( row == -1){
+            JOptionPane.showMessageDialog(this, "pilih data dulu");
+            return;
+            }
+       
+        String id = tblDataAnggota.getValueAt(row, 1).toString();
+        String nama = tblDataAnggota.getValueAt(row, 2).toString();
+        String jk = tblDataAnggota.getValueAt(row, 3).toString();
+        String tgl_lahir = tblDataAnggota.getValueAt(row, 4).toString();
+        String status = tblDataAnggota.getValueAt(row, 5).toString();
+        String thn_gabung = tblDataAnggota.getValueAt(row, 6).toString();
+        String nama_sabuk =tblDataAnggota.getValueAt(row, 7).toString();
+        
+        p.setData(id,nama,tgl_lahir,jk,status,thn_gabung,nama_sabuk);
+        p.setLocationRelativeTo(null);
+        p.setVisible(true);
+
+    }//GEN-LAST:event_tblDataAnggotaMouseClicked
+
+    private void jTcariAnggotaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTcariAnggotaKeyReleased
+        // TODO add your handling code here:
+        anggota ang = new anggota();
+        DefaultTableModel model = ang.filterTable(jTcariAnggota.getText());
+        tblDataAnggota.setModel(model);
+
+
+    }//GEN-LAST:event_jTcariAnggotaKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -135,7 +207,7 @@ public class panelAnggota extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTcariAnggota;
     private javax.swing.JTable tblDataAnggota;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
-
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import kelas.prestasi;
 /**
  *
  * @author Sukma Nur
@@ -15,6 +17,13 @@ public class panelPrestasi extends javax.swing.JPanel {
      */
     public panelPrestasi() {
         initComponents();
+         load_table_prestasi();
+    }
+    
+      public void load_table_prestasi(){
+    prestasi ps = new prestasi();
+    DefaultTableModel model = ps.showprestasi();
+    table_prestasi.setModel(model);
     }
 
     /**
@@ -56,6 +65,11 @@ public class panelPrestasi extends javax.swing.JPanel {
                 c_carianggotaActionPerformed(evt);
             }
         });
+        c_carianggota.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                c_carianggotaKeyReleased(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(140, 22, 22));
         jPanel2.setPreferredSize(new java.awt.Dimension(719, 515));
@@ -71,6 +85,11 @@ public class panelPrestasi extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        table_prestasi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_prestasiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table_prestasi);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -150,11 +169,51 @@ public class panelPrestasi extends javax.swing.JPanel {
 
     private void b_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_tambahActionPerformed
         // TODO add your handling code here:
+        popUpTambahPrestasi popup = new popUpTambahPrestasi(this);
+        popup.setVisible(true);
+        popup.tampilanTambah();
     }//GEN-LAST:event_b_tambahActionPerformed
 
     private void c_carianggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_carianggotaActionPerformed
-        // TODO add your handling code here:
+
+            // TODO add your handling code here:
+        
     }//GEN-LAST:event_c_carianggotaActionPerformed
+
+    private void table_prestasiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_prestasiMouseClicked
+        // TODO add your handling code here:
+         int baris = table_prestasi.rowAtPoint(evt.getPoint());
+        
+        if (baris >=0){
+            String ID_prestasi = table_prestasi.getValueAt(baris, 1).toString();
+            Object peringkatobj = table_prestasi.getValueAt(baris, 2).toString();
+            Object tingkatobj = table_prestasi.getValueAt(baris, 3).toString();
+            Object tglobj = table_prestasi.getValueAt(baris, 4);
+            Object namaAnggotaobj = table_prestasi.getValueAt(baris, 5).toString();
+            
+            //mengonversi objek menjadi string, jika null maka hasilnya null atau string kosong
+            
+            String peringkat = (peringkatobj != null)? peringkatobj.toString():null;
+            String tingkat = (tingkatobj != null)? tingkatobj.toString():null;
+            String tgl = (tglobj != null)? tglobj.toString():null;
+            String namaAnggota = (namaAnggotaobj != null)? namaAnggotaobj.toString():null;
+            
+            
+            popUpTambahPrestasi edit = new popUpTambahPrestasi(this);
+            edit.setVisible(true);
+            edit.setData(ID_prestasi, peringkat, tgl, namaAnggota,tingkat);
+            edit.tampilanUbah();
+          
+        }
+    }//GEN-LAST:event_table_prestasiMouseClicked
+
+    private void c_carianggotaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_carianggotaKeyReleased
+        // TODO add your handling code here:
+        String kataKunci = c_carianggota.getText();
+        prestasi ps = new prestasi();
+        DefaultTableModel model = ps.filterTablePrestasi(kataKunci);
+        table_prestasi.setModel(model);
+    }//GEN-LAST:event_c_carianggotaKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

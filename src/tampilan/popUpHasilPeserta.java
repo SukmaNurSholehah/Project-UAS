@@ -60,6 +60,7 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
         tCariNamaAnggota = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
 
@@ -184,6 +185,7 @@ public class popUpHasilPeserta extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tCariNamaAnggotaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCariNamaAnggotaKeyReleased

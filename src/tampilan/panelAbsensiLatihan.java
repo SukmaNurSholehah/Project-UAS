@@ -3,18 +3,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
+import kelas.clasJadwalLatihan;
+import tampilan.popUpAbsensi;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Sukma Nur
  */
 public class panelAbsensiLatihan extends javax.swing.JPanel {
+    
 
     /**
      * Creates new form panelAbsensi
      */
     public panelAbsensiLatihan() {
         initComponents();
+        loadTable();
+    }
+
+   public  void loadTable() {
+        clasJadwalLatihan jadwal = new clasJadwalLatihan();
+        DefaultTableModel model = jadwal.tampilJadwal();
+        tabel_absensi.setModel(model);
+    
     }
 
     /**
@@ -31,7 +43,7 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabel_absensi = new javax.swing.JTable();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
         jPanel1.setPreferredSize(new java.awt.Dimension(950, 650));
@@ -46,7 +58,7 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(250, 240, 230));
         jLabel2.setText("Tabel Data Jadwal Latihan");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabel_absensi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -57,7 +69,12 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabel_absensi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabel_absensiMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabel_absensi);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -118,6 +135,21 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tabel_absensiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabel_absensiMouseClicked
+        // TODO add your handling code here:
+        int baris = tabel_absensi.rowAtPoint(evt.getPoint());
+
+        if (baris >= 0) {
+            String tgl = tabel_absensi.getValueAt(baris, 2).toString();
+            String lokasi = tabel_absensi.getValueAt(baris, 3).toString();
+
+            popUpAbsensi absen = new popUpAbsensi();
+            absen.setVisible(true);
+            absen.tampilData(tgl, lokasi);
+
+        }
+    }//GEN-LAST:event_tabel_absensiMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -125,6 +157,6 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabel_absensi;
     // End of variables declaration//GEN-END:variables
 }

@@ -81,6 +81,7 @@ public class popUpCariAnggota extends javax.swing.JFrame {
         table_data_anggota = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
 
@@ -157,6 +158,7 @@ public class popUpCariAnggota extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void t_cari_namaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_cari_namaKeyReleased

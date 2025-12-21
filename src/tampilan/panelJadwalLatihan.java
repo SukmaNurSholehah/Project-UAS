@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
+import kelas.clasJadwalLatihan;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,8 +17,74 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
     /**
      * Creates new form panelJadwalLatihan
      */
+     private clasJadwalLatihan jadwal = new clasJadwalLatihan();
+
     public panelJadwalLatihan() {
         initComponents();
+       
+        jadwal.comboPelatih(cPelatih);
+        jadwal.autoID(lbID);
+        
+        tglSekarang();
+        setTgl();
+    }
+    
+     private void setTgl() {
+        calendar.addPropertyChangeListener("calendar", evt -> {
+            Date tgl = calendar.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            lbTgl.setText(sdf.format(tgl));
+            
+            loadDataJadwal();
+        });
+    }
+
+    private void tglSekarang() {
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        lbTgl.setText(sdf.format(today));
+    }
+
+    private String konversiIDPelatih(String namaPelatih) {
+        String id = "";
+        try {
+            id = jadwal.konversIDpelatih(namaPelatih);
+        } catch (Exception e) {
+            System.out.println(e);
+            return "";
+        }
+        return id;
+    }
+
+    private void reset() {
+        tglSekarang();
+        tLokasi.setText("");
+        cPelatih.setSelectedIndex(0);
+        tKeterangan.setText("");
+    }
+
+    private void loadDataJadwal() {
+        try {
+            Date selected = calendar.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String tglLabel = sdf.format(selected);
+            lbTgl.setText(tglLabel);
+
+            // Ubah ke format database
+            SimpleDateFormat toDB = new SimpleDateFormat("yyyy-MM-dd");
+            String tglDatabase = toDB.format(selected);
+
+            // panggil method tampilDataJadwal
+            jadwal.tampilDataJadwal(
+                    tglDatabase,
+                    lbID,
+                    lbTgl,
+                    tLokasi,
+                    cPelatih,
+                    tKeterangan);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
@@ -28,7 +98,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jCalendar1 = new com.toedter.calendar.JCalendar();
+        calendar = new com.toedter.calendar.JCalendar();
         JPanel = new javax.swing.JPanel();
         lKeterangan = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -39,10 +109,10 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
         lbTgl = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         tLokasi = new javax.swing.JTextField();
-        tKeterangan = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cPelatih = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
+        tKeterangan = new javax.swing.JTextArea();
         bTambah = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
@@ -54,7 +124,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(140, 22, 22));
         jLabel1.setText("KALENDER LATIHAN");
 
-        jCalendar1.setPreferredSize(new java.awt.Dimension(562, 409));
+        calendar.setPreferredSize(new java.awt.Dimension(562, 409));
 
         JPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Keterangan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
@@ -111,6 +181,9 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(140, 22, 22));
         jLabel6.setText("Keterangan:");
 
+        tKeterangan.setColumns(20);
+        tKeterangan.setRows(5);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -118,8 +191,9 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
+                    .addComponent(tKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel6)
                         .addComponent(jLabel4)
                         .addComponent(jLabel5)
                         .addGroup(jPanel3Layout.createSequentialGroup()
@@ -131,8 +205,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(lbID))
                         .addComponent(tLokasi)
-                        .addComponent(tKeterangan, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                        .addComponent(cPelatih, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cPelatih, 0, 251, Short.MAX_VALUE)))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -157,8 +230,8 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addComponent(tKeterangan, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         bTambah.setText("Tambah");
@@ -169,8 +242,18 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
         });
 
         bUbah.setText("Ubah");
+        bUbah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUbahActionPerformed(evt);
+            }
+        });
 
         bHapus.setText("Hapus");
+        bHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bHapusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -217,7 +300,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                         .addGap(0, 20, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
@@ -227,7 +310,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(112, 112, 112)
                 .addComponent(JPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -251,7 +334,65 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
+        jadwal.setIdJadwal(lbID.getText());
+
+        //ubah format tanggal
+        try {
+            String tgl = lbTgl.getText();
+            SimpleDateFormat from = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat to = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date d = from.parse(tgl);
+            String tglDatabase = to.format(d);
+
+            jadwal.setTgl(tglDatabase);
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Gagal menyimpan tanggal");
+        }
+
+        jadwal.setLokasi(tLokasi.getText());
+        jadwal.setPelatih(konversiIDPelatih(cPelatih.getSelectedItem().toString()));
+        jadwal.setKeterangan(tKeterangan.getText());
+
+        jadwal.tambahJadwal();
+        reset();
     }//GEN-LAST:event_bTambahActionPerformed
+
+    private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
+        // TODO add your handling code here:
+        jadwal.setIdJadwal(lbID.getText());
+
+        //ubah format tanggal
+        try {
+            String tgl = lbTgl.getText();
+            SimpleDateFormat from = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat to = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date d = from.parse(tgl);
+            String tglDatabase = to.format(d);
+
+            jadwal.setTgl(tglDatabase);
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Gagal menyimpan tanggal");
+        }
+
+        jadwal.setLokasi(tLokasi.getText());
+        jadwal.setPelatih(konversiIDPelatih(cPelatih.getSelectedItem().toString()));
+        jadwal.setKeterangan(tKeterangan.getText());
+
+        jadwal.ubahJadwal();
+        reset();
+    }//GEN-LAST:event_bUbahActionPerformed
+
+    private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
+        // TODO add your handling code here:
+         jadwal.setIdJadwal(lbID.getText());
+
+        jadwal.hapusData();
+        reset();
+    }//GEN-LAST:event_bHapusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -260,7 +401,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
     private javax.swing.JButton bTambah;
     private javax.swing.JButton bUbah;
     private javax.swing.JComboBox<String> cPelatih;
-    private com.toedter.calendar.JCalendar jCalendar1;
+    private com.toedter.calendar.JCalendar calendar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -273,7 +414,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
     private javax.swing.JLabel lKeterangan;
     private javax.swing.JLabel lbID;
     private javax.swing.JLabel lbTgl;
-    private javax.swing.JTextField tKeterangan;
+    private javax.swing.JTextArea tKeterangan;
     private javax.swing.JTextField tLokasi;
     // End of variables declaration//GEN-END:variables
 }
