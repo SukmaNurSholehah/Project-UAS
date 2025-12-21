@@ -4,11 +4,16 @@
  */
 package kelas;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.*;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -178,4 +183,36 @@ public class Sabuk extends koneksi {
         return idSabuk;
     }
     
+     public void aturTable(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Sabuk
+        tData.getColumnModel().getColumn(2).setPreferredWidth(150); // Nama Sabuk
+        tData.getColumnModel().getColumn(2).setPreferredWidth(100); // Tingkatan
+}
 }

@@ -15,6 +15,7 @@ public class panelAbout extends javax.swing.JPanel {
      */
     public panelAbout() {
         initComponents();
+        tAbout.setEditable(false);
     }
 
     /**
@@ -28,8 +29,8 @@ public class panelAbout extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tAbout = new javax.swing.JTextArea();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
         jPanel1.setPreferredSize(new java.awt.Dimension(950, 650));
@@ -38,36 +39,38 @@ public class panelAbout extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(140, 22, 22));
         jLabel1.setText("ABOUT");
 
-        jLabel2.setText("Aplikasi ini dibuat untuk membantu manajemen kegiatan-kegiatan PORIGAL, seperti penjadwalan latihan, penjadwalan");
-
-        jLabel3.setText("event atau ujian, absensi, pencatatan prestasi. Aplikasi ini dibuat oleh........");
+        tAbout.setBackground(new java.awt.Color(250, 240, 230));
+        tAbout.setColumns(20);
+        tAbout.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tAbout.setRows(5);
+        tAbout.setText("Aplikasi ini dibuat untuk membantu manajemen kegiatan PORIGAL, meliputi pendataan anggota, \npenjadwalan latihan, penjadwalan  ujian, pengelolaan absensi, serta pencatatan prestasi. \nAplikasi ini bertujuan untuk mempermudah pengelolaan data kegiatan agar lebih terstruktur,\nefisien, dan mudah diakses.\n\nAplikasi ini dikembangkan sebagai tugas akhir mata kuliah Pemrograman Berorientasi Objek (PBO)\npada Program Studi Sistem Informasi,\nInstitut Teknologi Mojosari.\n\nDikembangkan oleh:\nM. Azka Al Fauwaz  [Semester 3- SI]\nM.Riyadlus Sholihin  [Semester 3- SI}\nNaila Binti Fauziah  [Semester 3- SI]\nNiken Ayu Zaskia F. [Semester 3- SI]\nFatimmatuz Zahro'  [Semester 3- SI]");
+        tAbout.setBorder(null);
+        tAbout.setCaretColor(new java.awt.Color(250, 240, 230));
+        tAbout.setDisabledTextColor(new java.awt.Color(250, 240, 230));
+        tAbout.setSelectionColor(new java.awt.Color(250, 240, 230));
+        jScrollPane1.setViewportView(tAbout);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))))
-                .addContainerGap(269, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 912, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(568, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -89,8 +92,8 @@ public class panelAbout extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea tAbout;
     // End of variables declaration//GEN-END:variables
 }

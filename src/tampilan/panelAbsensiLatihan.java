@@ -4,7 +4,6 @@
  */
 package tampilan;
 import kelas.clasJadwalLatihan;
-import tampilan.popUpAbsensi;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,7 +25,7 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
         clasJadwalLatihan jadwal = new clasJadwalLatihan();
         DefaultTableModel model = jadwal.tampilJadwal();
         tabel_absensi.setModel(model);
-    
+        jadwal.aturTable(tabel_absensi);
     }
 
     /**
@@ -140,12 +139,13 @@ public class panelAbsensiLatihan extends javax.swing.JPanel {
         int baris = tabel_absensi.rowAtPoint(evt.getPoint());
 
         if (baris >= 0) {
+            String idJadwal = tabel_absensi.getValueAt(baris, 1).toString();
             String tgl = tabel_absensi.getValueAt(baris, 2).toString();
             String lokasi = tabel_absensi.getValueAt(baris, 3).toString();
 
             popUpAbsensi absen = new popUpAbsensi();
             absen.setVisible(true);
-            absen.tampilData(tgl, lokasi);
+            absen.tampilData(idJadwal, tgl, lokasi);
 
         }
     }//GEN-LAST:event_tabel_absensiMouseClicked

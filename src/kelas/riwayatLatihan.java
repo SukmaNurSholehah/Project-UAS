@@ -12,7 +12,11 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import kelas.jadwal;
+import java.awt.Color;
+import java.awt.Font;
+import java.sql.SQLException;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -88,54 +92,71 @@ public class riwayatLatihan extends koneksi {
         }
     }
 
-    public DefaultTableModel tampilTidakHadir(String idJadwal) {
+    public DefaultTableModel tampilDetailRiwayat(String idJadwal) {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No");
         model.addColumn("Nama Anggota");
         model.addColumn("Kehadiran");
 
         try {
-            String sql = "SELECT a.nama_anggota "
+            String sql = "SELECT a.nama_anggota, al.hadir "
                     + "FROM absensi_latihan al "
                     + "JOIN anggota a ON al.ID_anggota = a.ID_anggota "
-                    + "WHERE al.ID_jadwal = ? AND al.kehadiran = 'Tidak Hadir'";
+                    + "WHERE al.ID_jadwal = ? ";
 
-            PreparedStatement ps = koneksi.prepareStatement(sql);
+             ps = koneksi.prepareStatement(sql);
             ps.setString(1, idJadwal);
-            ResultSet rs = ps.executeQuery();
+             rs = ps.executeQuery();
 
             int no = 1;
             while (rs.next()) {
-                model.addRow(new Object[]{
-                    no++,
-                    rs.getString("nama_anggota"),
-                    "Tidak Hadir"
-                });
+                String nama = rs.getString("nama_anggota");
+                int hadir = rs.getInt("hadir");
+
+                String statusKehadiran = (hadir == 1) ? "HADIR" : "TIDAK HADIR";
+
+                Object baris[] = {no++, nama, statusKehadiran};
+                model.addRow(baris);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            e.printStackTrace();
         }
 
         return model;
     }
+    
+     public void aturTable(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
 
-    public ResultSet getAbsensiTidakHadir(String idJadwal) {
-        ResultSet rs = null;
-        try {
-            String sql
-                    = "SELECT a.nama_anggota "
-                    + "FROM absensi_latihan al "
-                    + "JOIN anggota a ON al.ID_anggota = a.ID_anggota "
-                    + "WHERE al.hadir = 0 AND al.ID_jadwal = ?";
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
 
-            PreparedStatement ps = koneksi.prepareStatement(sql);
-            ps.setString(1, idJadwal); // ✅ SEKARANG MASUK AKAL
-            rs = ps.executeQuery();
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        return rs;
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(150); // Nama Anggota
+        tData.getColumnModel().getColumn(2).setPreferredWidth(100); // Kehadiran
+
     }
 }

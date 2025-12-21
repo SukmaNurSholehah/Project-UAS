@@ -40,6 +40,7 @@ public class popUpAbsensiUjian extends javax.swing.JFrame {
         absensiUjian absen = new absensiUjian();
         DefaultTableModel model = absen.showPeserta(idRegis);
         table_absensi.setModel(model);
+        absen.aturTable(table_absensi);
     }
 
     /**

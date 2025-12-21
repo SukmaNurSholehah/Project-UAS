@@ -284,7 +284,7 @@ public class registrasi extends koneksi {
 
         try {
             query = "SELECT a.ID_anggota, a.nama_anggota, a.status,"
-                    + " k.nama-kegiatan, k.tgl_mulai "
+                    + " k.nama_kegiatan, k.tgl_mulai "
                     + "FROM detail_registrasi d "
                     + "JOIN anggota a ON d.ID_anggota = a.ID_anggota "
                     + "JOIN registrasi r ON d.ID_registrasi = r.ID_registrasi "
@@ -540,6 +540,71 @@ public class registrasi extends koneksi {
         tData.getColumnModel().getColumn(4).setPreferredWidth(100); // Tanggal Selesai
         tData.getColumnModel().getColumn(5).setPreferredWidth(100); // Lokasi
         tData.getColumnModel().getColumn(6).setPreferredWidth(250); // Keterangan
-
     }
+    
+     public void aturTableDataRegistrasi(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Anggota
+        tData.getColumnModel().getColumn(2).setPreferredWidth(250); // Nama Anggota
+        tData.getColumnModel().getColumn(3).setPreferredWidth(100); // Status
+}
+     
+    public void aturTableDataAnggota(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Anggota
+        tData.getColumnModel().getColumn(2).setPreferredWidth(250); // Nama Anggota
+        tData.getColumnModel().getColumn(3).setPreferredWidth(100); // Status
+}  
 }

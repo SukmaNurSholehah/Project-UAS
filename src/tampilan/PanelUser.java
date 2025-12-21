@@ -4,11 +4,8 @@
  */
 package tampilan;
 
-import java.sql.*;
 import javax.swing.table.DefaultTableModel;
-import kelas.koneksi;
 import kelas.KelasUser;
-import tampilan.PanelUser;
 
 /**
  *
@@ -28,6 +25,7 @@ public class PanelUser extends javax.swing.JPanel {
         KelasUser user = new KelasUser();
         DefaultTableModel model = user.loadtable();
         jtabeluser.setModel(model);
+        user.aturTable(jtabeluser);
     }
 
     /**

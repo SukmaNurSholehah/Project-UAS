@@ -3,12 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
-import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import kelas.Sabuk;
 import kelas.anggota;
-import java.sql.ResultSet;
 
 
 
@@ -33,6 +31,7 @@ public class panelAnggota extends javax.swing.JPanel {
         anggota ag = new anggota();
         DefaultTableModel model = ag.showanggota();
         tblDataAnggota.setModel(model);
+        ag.aturTable(tblDataAnggota);
     }
 
       public String konversiIDSabuk(String namasabuk){
@@ -124,8 +123,8 @@ public class panelAnggota extends javax.swing.JPanel {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 896, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

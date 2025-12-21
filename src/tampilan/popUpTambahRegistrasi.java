@@ -46,6 +46,8 @@ public class popUpTambahRegistrasi extends javax.swing.JFrame {
             "Status"},
                 0);
         table_peserta.setModel(modelRegistrasi);
+        registrasi regis = new registrasi();
+        regis.aturTableDataAnggota(table_peserta);
     }
 
     public void tampilData(String id, String nama, String status) {

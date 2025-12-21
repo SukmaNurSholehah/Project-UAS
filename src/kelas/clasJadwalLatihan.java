@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package kelas;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,29 +13,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import kelas.koneksi;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author ASUS
  */
+public class clasJadwalLatihan extends koneksi {
 
-public class clasJadwalLatihan extends koneksi{
-    
     String idJadwal, tgl, lokasi, pelatih, keterangan;
     private final Connection cn;
     private PreparedStatement ps;
     private Statement st;
     private ResultSet rs;
     private String query;
-     
-    public clasJadwalLatihan(){
+
+    public clasJadwalLatihan() {
         cn = configDB();
-    } 
+    }
 
     public String getIdJadwal() {
         return idJadwal;
@@ -73,37 +77,35 @@ public class clasJadwalLatihan extends koneksi{
     public void setKeterangan(String keterangan) {
         this.keterangan = keterangan;
     }
-    
-    public void tambahJadwal(){
+
+    public void tambahJadwal() {
         query = "INSERT INTO jadwal_latihan VALUES (?,?,?,?,?)";
         try {
-        ps = cn.prepareStatement(query);
-        ps.setString(1, idJadwal);
-        ps.setString(2, tgl);
-        ps.setString(3, lokasi);
-        ps.setString(4, pelatih);
-        ps.setString(5, keterangan);
-        ps.executeUpdate();
-        ps.close();
-        JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
+            ps = cn.prepareStatement(query);
+            ps.setString(1, idJadwal);
+            ps.setString(2, tgl);
+            ps.setString(3, lokasi);
+            ps.setString(4, pelatih);
+            ps.setString(5, keterangan);
+            ps.executeUpdate();
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
         } catch (SQLException e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "error");
         }
     }
-        
-    
 
-    public void ubahJadwal(){
-     query = "UPDATE jadwal_latihan SET lokasi=?, pelatih=?, keterangan =? "
+    public void ubahJadwal() {
+        query = "UPDATE jadwal_latihan SET lokasi=?, pelatih=?, keterangan =? "
                 + "WHERE ID_jadwal =?";
-                try {
-            ps= cn.prepareStatement(query);
+        try {
+            ps = cn.prepareStatement(query);
             ps.setString(1, lokasi);
             ps.setString(2, pelatih);
             ps.setString(3, keterangan);
             ps.setString(4, idJadwal);
-            
+
             ps.executeUpdate();
             ps.close();
             JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
@@ -113,8 +115,7 @@ public class clasJadwalLatihan extends koneksi{
         }
     }
 
-
- public void hapusData() {
+    public void hapusData() {
         try {
             query = "DELETE FROM jadwal_latihan WHERE ID_jadwal = ?";
 
@@ -129,18 +130,18 @@ public class clasJadwalLatihan extends koneksi{
             JOptionPane.showMessageDialog(null, "Error : ");
         }
     }
-    
-    public void autoID(JLabel tID){
+
+    public void autoID(JLabel tID) {
         try {
             query = "SELECT MAX(ID_jadwal) FROM jadwal_latihan";
 
             st = cn.createStatement();
             rs = st.executeQuery(query);
-            
+
             String id = "JDL001";
-            if (rs.next()){
+            if (rs.next()) {
                 String maxID = rs.getString(1);
-                if (maxID != null){
+                if (maxID != null) {
                     int num = Integer.parseInt(maxID.substring(3));
                     num++;
                     id = String.format("JDL%03d", num);
@@ -152,7 +153,7 @@ public class clasJadwalLatihan extends koneksi{
             JOptionPane.showMessageDialog(null, "Error : ");
         }
     }
-    
+
     public void tampilDataJadwal(String tgl, JLabel id, JLabel tanggal, JTextField lokasi,
             JComboBox pelatih, JTextArea keterangan) {
         query = "SELECT j.ID_jadwal, j.tgl, j.lokasi, p.nama_pelatih, j.keterangan "
@@ -179,7 +180,7 @@ public class clasJadwalLatihan extends koneksi{
             System.out.println(e);
         }
     }
-    
+
     public boolean cekDataJadwal(String tgl) {
         query = "SELECT * FROM jadwal_latihan WHERE tgl =?";
         try {
@@ -193,20 +194,20 @@ public class clasJadwalLatihan extends koneksi{
         return false;
     }
 
-    public String tampilKeterangan(String tgl){
+    public String tampilKeterangan(String tgl) {
         query = "SELECT j.ID_jadwal, j.tgl, j.lokasi, p.nama_pelatih, j.keterangan"
                 + " FROM jadwal_latihan j "
                 + "JOIN pelatih p ON j.pelatih = p.ID_pelatih WHERE j.tgl=?";
         try {
-            ps=cn.prepareStatement(query);
+            ps = cn.prepareStatement(query);
             ps.setString(1, tgl);
-            rs=ps.executeQuery();
-            
-            if(rs.next()){
-                return "Tanggal  : "+rs.getString("tgl")+"\n"
-                       +"Lokasi  : "+rs.getString("lokasi")+"\n"
-                       +"Pelatih : "+rs.getString("nama_pelatih")+"\n"
-                       + rs.getString("keterangan");
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return "Tanggal  : " + rs.getString("tgl") + "\n"
+                        + "Lokasi  : " + rs.getString("lokasi") + "\n"
+                        + "Pelatih : " + rs.getString("nama_pelatih") + "\n"
+                        + rs.getString("keterangan");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
@@ -214,31 +215,31 @@ public class clasJadwalLatihan extends koneksi{
         }
         return "Tidak ada kegiatan pada tanggal ini.";
     }
-    
-     public void editData(String tgl, JTextField id, JTextField lokasi, JComboBox pelatih, JTextField materi){
+
+    public void editData(String tgl, JTextField id, JTextField lokasi, JComboBox pelatih, JTextField materi) {
         query = "SELECT j.ID_jadwal, j.lokasi, p.nama_pelatih, j.keterangan FROM jadwal_latihan j "
                 + "JOIN pelatih p ON j.pelatih = p.ID_pelatih  WHERE j.tgl =?";
         try {
             ps = cn.prepareStatement(query);
             ps.setString(1, tgl);
             rs = ps.executeQuery();
-            if(rs.next()){
-               id.setText(rs.getString("ID_jadwal")) ;
-               lokasi.setText(rs.getString("lokasi")) ;
-               pelatih.setSelectedItem(rs.getString("nama_pelatih")) ;
-                materi.setText (rs.getString("keterangan"));
+            if (rs.next()) {
+                id.setText(rs.getString("ID_jadwal"));
+                lokasi.setText(rs.getString("lokasi"));
+                pelatih.setSelectedItem(rs.getString("nama_pelatih"));
+                materi.setText(rs.getString("keterangan"));
             } else {
                 lokasi.setText("");
                 pelatih.setSelectedIndex(0);
                 materi.setText("");
             }
-            
+
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
-    public DefaultTableModel tampilJadwal(){
+
+    public DefaultTableModel tampilJadwal() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("No.");
         model.addColumn("ID Jadwal");
@@ -247,10 +248,10 @@ public class clasJadwalLatihan extends koneksi{
         model.addColumn("Pelatih");
         model.addColumn("Keterangan");
         try {
-            query="SELECT j.ID_jadwal, j.tgl, j.lokasi, p.nama_pelatih, j.keterangan "
+            query = "SELECT j.ID_jadwal, j.tgl, j.lokasi, p.nama_pelatih, j.keterangan "
                     + "FROM jadwal_latihan j "
                     + "JOIN pelatih p ON j.pelatih=p.ID_pelatih ";
-             st = cn.createStatement();
+            st = cn.createStatement();
             rs = st.executeQuery(query);
 
             int no = 1;
@@ -269,13 +270,13 @@ public class clasJadwalLatihan extends koneksi{
         }
         return model;
     }
-    
-    public void comboPelatih(JComboBox cPelatih){
+
+    public void comboPelatih(JComboBox cPelatih) {
         try {
             query = "SELECT nama_pelatih FROM pelatih";
             st = cn.createStatement();
             rs = st.executeQuery(query);
-            
+
             while (rs.next()) {
                 cPelatih.addItem(rs.getString("nama_pelatih"));
 
@@ -285,8 +286,8 @@ public class clasJadwalLatihan extends koneksi{
         }
         cPelatih.setSelectedIndex(0);
     }
-    
-     public  String konversIDpelatih(String namaPelatih){
+
+    public String konversIDpelatih(String namaPelatih) {
         String idPelatih = "";
         try {
             query = "SELECT ID_pelatih FROM pelatih WHERE nama_pelatih=?";
@@ -301,6 +302,41 @@ public class clasJadwalLatihan extends koneksi{
         }
         return idPelatih;
     }
-    
-    
+
+    public void aturTable(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Jadwal
+        tData.getColumnModel().getColumn(2).setPreferredWidth(100); // Tanggal Mulai
+        tData.getColumnModel().getColumn(3).setPreferredWidth(100); // Lokasi
+        tData.getColumnModel().getColumn(4).setPreferredWidth(150); //Nama Pelatih
+        tData.getColumnModel().getColumn(5).setPreferredWidth(250); // Keterangan
+
+    }
+
 }

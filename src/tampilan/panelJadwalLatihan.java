@@ -7,6 +7,7 @@ import kelas.clasJadwalLatihan;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import kelas.laporan;
 
 /**
  *
@@ -116,6 +117,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
         bTambah = new javax.swing.JButton();
         bUbah = new javax.swing.JButton();
         bHapus = new javax.swing.JButton();
+        bExport = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
         jPanel1.setPreferredSize(new java.awt.Dimension(950, 650));
@@ -284,6 +286,16 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
+        bExport.setBackground(new java.awt.Color(255, 51, 51));
+        bExport.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bExport.setForeground(new java.awt.Color(255, 255, 255));
+        bExport.setText("Export PDF");
+        bExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -300,8 +312,13 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                         .addGap(0, 20, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(bExport)
+                        .addGap(35, 35, 35))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,7 +327,10 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(calendar, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(bExport)))
                 .addGap(112, 112, 112)
                 .addComponent(JPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -357,6 +377,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
 
         jadwal.tambahJadwal();
         reset();
+        jadwal.autoID(lbID);
     }//GEN-LAST:event_bTambahActionPerformed
 
     private void bUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUbahActionPerformed
@@ -384,6 +405,7 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
 
         jadwal.ubahJadwal();
         reset();
+        jadwal.autoID(lbID);
     }//GEN-LAST:event_bUbahActionPerformed
 
     private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
@@ -392,11 +414,18 @@ public class panelJadwalLatihan extends javax.swing.JPanel {
 
         jadwal.hapusData();
         reset();
+        jadwal.autoID(lbID);
     }//GEN-LAST:event_bHapusActionPerformed
+
+    private void bExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportActionPerformed
+       laporan lap = new laporan();
+       lap.generateLaporanJadwalLatihan();
+    }//GEN-LAST:event_bExportActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel;
+    private javax.swing.JButton bExport;
     private javax.swing.JButton bHapus;
     private javax.swing.JButton bTambah;
     private javax.swing.JButton bUbah;

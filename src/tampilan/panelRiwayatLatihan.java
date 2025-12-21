@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package tampilan;
+
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import kelas.clasJadwalLatihan;
 import kelas.riwayatLatihan;
 import tampilan.popUpDetailRiwayat;
 
@@ -18,8 +21,14 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
      */
     public panelRiwayatLatihan() {
         initComponents();
-         riwayatLatihan rl = new riwayatLatihan();
-         rl.tampilRiwayatLatihan(tblRiwayatLatihan);
+        loadTableJadwal();
+    }
+
+    void loadTableJadwal() {
+        clasJadwalLatihan jadwal = new clasJadwalLatihan();
+        DefaultTableModel model = jadwal.tampilJadwal();
+        tblRiwayatLatihan.setModel(model);
+        jadwal.aturTable(tblRiwayatLatihan);
     }
 
     /**
@@ -131,17 +140,17 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
 
     private void tblRiwayatLatihanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRiwayatLatihanMouseClicked
         // TODO add your handling code here:
-            int baris = tblRiwayatLatihan.getSelectedRow();
+        int baris = tblRiwayatLatihan.getSelectedRow();
 
-          if (baris != -1) {
-              String id      = tblRiwayatLatihan.getValueAt(baris, 0).toString();
-              String tanggal = tblRiwayatLatihan.getValueAt(baris, 1).toString();
-              String lokasi  = tblRiwayatLatihan.getValueAt(baris, 2).toString();
-              String pelatih = tblRiwayatLatihan.getValueAt(baris, 3).toString();
+        if (baris != -1) {
+            String id = tblRiwayatLatihan.getValueAt(baris, 1).toString();
+            String tanggal = tblRiwayatLatihan.getValueAt(baris, 2).toString();
+            String lokasi = tblRiwayatLatihan.getValueAt(baris, 3).toString();
+            String pelatih = tblRiwayatLatihan.getValueAt(baris, 4).toString();
 
-              new popUpDetailRiwayat(
-                  id, tanggal, lokasi, pelatih).setVisible(true);
-          }
+            new popUpDetailRiwayat(
+                    id, tanggal, lokasi, pelatih).setVisible(true);
+        }
     }//GEN-LAST:event_tblRiwayatLatihanMouseClicked
 
 

@@ -29,6 +29,7 @@ public class panelSabuk extends javax.swing.JPanel {
     public void tampilData() {
         DefaultTableModel model = sbk.tampil();
         jTsabuk.setModel(model);
+        sbk.aturTable(jTsabuk);
     }
 
     /**

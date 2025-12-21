@@ -27,13 +27,14 @@ public class popUpDataRegistrasi extends javax.swing.JFrame {
         DefaultTableModel model = regis.tampilData(idRegistrasi);
         table_peserta.setModel(model);
         regis.tampilKegiatan(idRegistrasi, lb_kegiatan, lb_tgl);
+        regis.aturTableDataRegistrasi(table_peserta);
     }
 
     public void tampilDataAKhir(String idKegiatan) {
         registrasi regis = new registrasi();
         DefaultTableModel model = regis.tampilDataAkhir(idKegiatan, lb_kegiatan, lb_tgl);
         table_peserta.setModel(model);
-
+        regis.aturTableDataRegistrasi(table_peserta);
     }
 
     /**

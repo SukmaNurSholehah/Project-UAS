@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package kelas;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -10,6 +12,9 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -112,25 +117,25 @@ public class clasAbsensiLatihan extends koneksi{
         }
     }
     
-    public String getIDJadwalLatihan(String lokasiLatihan) {
-        String idJadwalLatihan = "";
-        try {
-            query = "SELECT ID_jadwal FROM jadwal_latihan WHERE lokasi = ?";
-            ps = con.prepareStatement(query);
-            ps.setString(1, lokasiLatihan);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                idJadwalLatihan = rs.getString("ID_jadwal");
-            }
-            rs.close();
-            ps.close();
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return idJadwalLatihan;
-    }
+//    public String getIDJadwalLatihan(String lokasiLatihan) {
+//        String idJadwalLatihan = "";
+//        try {
+//            query = "SELECT ID_jadwal FROM jadwal_latihan WHERE lokasi = ?";
+//            ps = con.prepareStatement(query);
+//            ps.setString(1, lokasiLatihan);
+//            rs = ps.executeQuery();
+//
+//            if (rs.next()) {
+//                idJadwalLatihan = rs.getString("ID_jadwal");
+//            }
+//            rs.close();
+//            ps.close();
+//
+//        } catch (SQLException e) {
+//            System.out.println(e);
+//        }
+//        return idJadwalLatihan;
+//    }
     
     public DefaultTableModel showPeserta() {
         DefaultTableModel model = new DefaultTableModel() {
@@ -202,6 +207,40 @@ public class clasAbsensiLatihan extends koneksi{
         }
         return model;
     }
+    
+     public void aturTable(JTable tData) {
+        // Warna lembut untuk header
+        tData.getTableHeader().setBackground(new Color(102, 204, 255)); // biru pucat (baby blue)
+        tData.getTableHeader().setForeground(Color.BLACK);
+        tData.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+
+        // Warna sel tabel (hitam putih natural)
+        tData.setBackground(Color.WHITE);
+        tData.setForeground(Color.BLACK);
+        tData.setGridColor(Color.LIGHT_GRAY);
+        tData.setSelectionBackground(new Color(220, 240, 255)); // biru muda saat dipilih
+        tData.setSelectionForeground(Color.BLACK);
+
+        // === Mengatur rata tengah teks di tabel ===
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Rata tengah untuk semua kolom
+        for (int i = 0; i < tData.getColumnCount(); i++) {
+            tData.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Rata tengah header kolom juga
+        ((DefaultTableCellRenderer) tData.getTableHeader().getDefaultRenderer())
+                .setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Mengatur lebar kolom
+        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Anggota
+        tData.getColumnModel().getColumn(2).setPreferredWidth(250); // Nama Anggota
+        tData.getColumnModel().getColumn(3).setPreferredWidth(100); // Status
+        tData.getColumnModel().getColumn(4).setPreferredWidth(100); // Kehadiran
+}
 }
 
     

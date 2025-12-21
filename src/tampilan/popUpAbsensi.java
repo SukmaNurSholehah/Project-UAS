@@ -17,6 +17,7 @@ public class popUpAbsensi extends javax.swing.JFrame {
     /**
      * Creates new form popUpAbsensi
      */
+    private String idJadwalLatihan;
     public popUpAbsensi() {
         initComponents();
         load_table();
@@ -25,15 +26,25 @@ public class popUpAbsensi extends javax.swing.JFrame {
         absen.autoID(lbID);
     }
 
-    public void tampilData(String tanggal, String lokasi) {
+    public void tampilData(String idJadwal, String tanggal, String lokasi) {
+        setIdJadwalLatihan(idJadwal);
         lTanggal.setText(tanggal);
         lLokasi.setText(lokasi);
+    }
+    
+    void setIdJadwalLatihan(String idJadwal){
+         this.idJadwalLatihan = idJadwal;
+    }
+    
+    String getIdJadwalLatihan(){
+        return idJadwalLatihan;
     }
 
     public void load_table() {
         clasAbsensiLatihan absen = new clasAbsensiLatihan();
         DefaultTableModel model = absen.showPeserta();
         tAbsen.setModel(model);
+        absen.aturTable(tAbsen);
     }
 
     /**
@@ -199,7 +210,6 @@ public class popUpAbsensi extends javax.swing.JFrame {
         absen.setIdAbsensiLatihan(lbID.getText());
 
         //untuk mendapatkan idJadwal dari konversi lokasi latihan 
-        String idJadwal = absen.getIDJadwalLatihan(lLokasi.getText());
         absen.setTgl(lTanggal.getText());
 
         boolean status = true; //penanda apakah data berhasil disimpan atau tidak
@@ -212,8 +222,8 @@ public class popUpAbsensi extends javax.swing.JFrame {
             int hadir = (hadirValue != null && hadirValue) ? 1 : 0;
 
             String idPeserta = tAbsen.getValueAt(i, 1).toString();
-
-            absen.setIdJadwalLatihan(idJadwal);
+            
+            absen.setIdJadwalLatihan(getIdJadwalLatihan());
             absen.setIdAnggota(idPeserta);
             absen.setKehadiran(hadir);
 

@@ -3,15 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tampilan;
-import java.sql.Connection;
-import java.awt.HeadlessException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
-import kelas.jadwal;
 import kelas.riwayatLatihan;
 /**
  *
@@ -39,28 +33,10 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
     }
     
     private void loadAbsensiTidakHadir(String idJadwal) {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Nama Anggota");
-        model.addColumn("Status");
-
-        try {
-            riwayatLatihan rl = new riwayatLatihan();
-            ResultSet rs = rl.getAbsensiTidakHadir(idJadwal);
-
-            if (rs != null) {
-                while (rs.next()) {
-                    model.addRow(new Object[]{
-                        rs.getString(1),
-                        "Tidak Hadir"
-                    });
-                }
-            }
-
-            tblAbsensi.setModel(model);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        riwayatLatihan rw = new riwayatLatihan();
+        DefaultTableModel model = rw.tampilDetailRiwayat(idJadwal);
+        tblAbsensi.setModel(model);
+        rw.aturTable(tblAbsensi);
     }
 
 

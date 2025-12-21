@@ -165,9 +165,12 @@ public class laporan {
 
         } catch (Exception e) {
             System.out.println(e);
+            e.printStackTrace();
         }
 
     }
+    
+//===================================================================================================================
 
     public void generateDataRegistrasi(String idKegiatan, JLabel lbNama, JLabel lbTgl) {
         try {
@@ -347,6 +350,32 @@ public class laporan {
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
-        }
+        }   
+    
     }
+    
+    public void generateLaporanJadwalLatihan(){
+          try {
+            clasJadwalLatihan jadwal = new clasJadwalLatihan();
+            DefaultTableModel model = jadwal.tampilJadwal();
+
+            // Format tanggal hari ini (YYYY-MM-DD)
+            String tanggal = new java.text.SimpleDateFormat("yyyy-MM-dd")
+                    .format(new java.util.Date());
+
+            // nama file
+            String fileName = "Laporan_Jadwal_Latihan_PORSIGAL_" + tanggal;
+            String[] headers = {
+                "No", "ID Jadwal", "Tanggal","Lokasi", "Pelatih", "Keterangan"
+            };
+
+            float[] widths = {1f, 3f, 4f, 3f,4f,6f};
+            formatLaporan(fileName, "Laporan Jadwal Latihan PORSIGAL", tanggal, headers, widths, model);
+
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }   
+    }
+    
 }
