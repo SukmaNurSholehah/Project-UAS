@@ -4,11 +4,9 @@
  */
 package tampilan;
 
-import javax.swing.JOptionPane;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
-import kelas.clasJadwalLatihan;
 import kelas.riwayatLatihan;
-import tampilan.popUpDetailRiwayat;
 
 /**
  *
@@ -22,13 +20,43 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
     public panelRiwayatLatihan() {
         initComponents();
         loadTableJadwal();
+        setTanggalListener();
     }
 
-    void loadTableJadwal() {
-        clasJadwalLatihan jadwal = new clasJadwalLatihan();
-        DefaultTableModel model = jadwal.tampilJadwal();
+   private void loadTableJadwal() {
+        riwayatLatihan riwayat = new riwayatLatihan();
+        DefaultTableModel model = riwayat.tampilRiwayatLatihan();
         tblRiwayatLatihan.setModel(model);
-        jadwal.aturTable(tblRiwayatLatihan);
+        riwayat.aturTableRiwayat(tblRiwayatLatihan);
+    }
+    
+    private void filterTGL() {
+        Date tglAwal = tStartDate.getDate();
+        Date tglAkhir = tEndDate.getDate();
+
+        // Cek null terlebih dahulu
+        if (tglAwal == null || tglAkhir == null) {
+            return; // hentikan supaya tidak error
+        }
+        
+        riwayatLatihan riwayat = new riwayatLatihan();
+        DefaultTableModel model = riwayat.filterRiwayatLatihan(tglAwal, tglAkhir);
+        tblRiwayatLatihan.setModel(model);
+        riwayat.aturTableRiwayat(tblRiwayatLatihan);
+    }
+    
+     private void setTanggalListener() {
+        tStartDate.addPropertyChangeListener("date", evt -> {
+            if (tStartDate.getDate() != null && tStartDate.getDate() != null) {
+                filterTGL();
+            }
+        });
+
+        tEndDate.addPropertyChangeListener("date", evt -> {
+            if (tEndDate.getDate() != null && tEndDate.getDate() != null) {
+                filterTGL();
+            }
+        });
     }
 
     /**
@@ -45,10 +73,11 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRiwayatLatihan = new javax.swing.JTable();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        tStartDate = new com.toedter.calendar.JDateChooser();
+        tEndDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        bReset = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(250, 240, 230));
 
@@ -81,6 +110,13 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
 
         jLabel4.setText("Tanggal Akhir");
 
+        bReset.setText("Reset");
+        bReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -98,12 +134,15 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(79, 79, 79)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addGap(55, 55, 55)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(bReset)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -117,9 +156,10 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(55, 55, 55)
+                    .addComponent(tStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bReset))
+                .addGap(54, 54, 54)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,16 +193,23 @@ public class panelRiwayatLatihan extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblRiwayatLatihanMouseClicked
 
+    private void bResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResetActionPerformed
+        tStartDate.setDate(null);
+        tEndDate.setDate(null);
+        loadTableJadwal();
+    }//GEN-LAST:event_bResetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JButton bReset;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser tEndDate;
+    private com.toedter.calendar.JDateChooser tStartDate;
     private javax.swing.JTable tblRiwayatLatihan;
     // End of variables declaration//GEN-END:variables
 }

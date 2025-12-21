@@ -7,14 +7,12 @@ package kelas;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.Connection;
-import java.awt.HeadlessException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -61,7 +59,13 @@ public class KelasUser extends koneksi {
     }
 
     public DefaultTableModel loadtable() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("NO");
         model.addColumn("Username");
         model.addColumn("Full Name");

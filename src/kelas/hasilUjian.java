@@ -58,7 +58,13 @@ public class hasilUjian extends koneksi {
     }
 
     public DefaultTableModel detailHasil(String IDregis) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Peserta");
         model.addColumn("Nama Peserta");
@@ -95,7 +101,13 @@ public class hasilUjian extends koneksi {
     }
 
     public DefaultTableModel hasilUjian() {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Kegiatan");
         model.addColumn("Nama Kegiatan");
@@ -136,7 +148,13 @@ public class hasilUjian extends koneksi {
     }
     
     public DefaultTableModel serchNama(String kataKunci){
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Peserta");
         model.addColumn("Nama Peserta");

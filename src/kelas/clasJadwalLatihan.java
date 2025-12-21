@@ -216,31 +216,14 @@ public class clasJadwalLatihan extends koneksi {
         return "Tidak ada kegiatan pada tanggal ini.";
     }
 
-    public void editData(String tgl, JTextField id, JTextField lokasi, JComboBox pelatih, JTextField materi) {
-        query = "SELECT j.ID_jadwal, j.lokasi, p.nama_pelatih, j.keterangan FROM jadwal_latihan j "
-                + "JOIN pelatih p ON j.pelatih = p.ID_pelatih  WHERE j.tgl =?";
-        try {
-            ps = cn.prepareStatement(query);
-            ps.setString(1, tgl);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                id.setText(rs.getString("ID_jadwal"));
-                lokasi.setText(rs.getString("lokasi"));
-                pelatih.setSelectedItem(rs.getString("nama_pelatih"));
-                materi.setText(rs.getString("keterangan"));
-            } else {
-                lokasi.setText("");
-                pelatih.setSelectedIndex(0);
-                materi.setText("");
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
     public DefaultTableModel tampilJadwal() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No.");
         model.addColumn("ID Jadwal");
         model.addColumn("Tanggal");
@@ -271,6 +254,7 @@ public class clasJadwalLatihan extends koneksi {
         return model;
     }
 
+    @SuppressWarnings("unchecked")
     public void comboPelatih(JComboBox cPelatih) {
         try {
             query = "SELECT nama_pelatih FROM pelatih";

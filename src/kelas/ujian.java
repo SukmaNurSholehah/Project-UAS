@@ -142,7 +142,13 @@ public class ujian extends koneksi {
     }
 
     public DefaultTableModel showKegiatan() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Kegiatan");
         model.addColumn("Nama Kegiatan");
@@ -177,6 +183,7 @@ public class ujian extends koneksi {
         return model;
     }
 
+    @SuppressWarnings("unchecked")
     public void comboPelatih(JComboBox cPelatih) {
         try {
             query = "SELECT nama_pelatih FROM pelatih";
@@ -253,7 +260,13 @@ public class ujian extends koneksi {
     }
 
     public DefaultTableModel filterTable(Date tglAwal, Date tglAkhir) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Kegiatan");
         model.addColumn("Nama Kegiatan");

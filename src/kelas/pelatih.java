@@ -135,7 +135,13 @@ public class pelatih extends koneksi {
     }
 
     public DefaultTableModel showPelatih() {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Pelatih");
         model.addColumn("Nama Pelatih");
@@ -167,6 +173,7 @@ public class pelatih extends koneksi {
         return model;
     }
 
+    @SuppressWarnings("unchecked")
     public void comboSabuk(JComboBox cSabuk) {
         cSabuk.removeAllItems();
         try {
@@ -226,7 +233,13 @@ public class pelatih extends koneksi {
     }
 
     public DefaultTableModel filterTable(String namaPelatih) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Pelatih");
         model.addColumn("Nama Pelatih");

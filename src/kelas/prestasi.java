@@ -135,7 +135,13 @@ public class prestasi extends koneksi{
     }
     
     public DefaultTableModel showprestasi() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID prestasi");
         model.addColumn("Peringkat");
@@ -172,7 +178,13 @@ public class prestasi extends koneksi{
     }
     
     public DefaultTableModel filterTablePrestasi(String namaAnggota) {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID prestasi");
         model.addColumn("Peringkat");
@@ -210,6 +222,7 @@ public class prestasi extends koneksi{
         
     }
     
+    @SuppressWarnings("unchecked")
     public void comboanggota(JComboBox canggota) {
         try {
             query = "SELECT nama_anggota FROM anggota";
@@ -245,8 +258,8 @@ public class prestasi extends koneksi{
     public void autoID(JTextField t_idprestasi) {
         try {
             query = "SELECT MAX(ID_prestasi) FROM prestasi";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
+             st = con.createStatement();
+             rs = st.executeQuery(query);
             
             String id = "PRES001";
             if (rs.next()) {

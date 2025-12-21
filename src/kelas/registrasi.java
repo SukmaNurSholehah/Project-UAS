@@ -174,6 +174,7 @@ public class registrasi extends koneksi {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void comboUjian(JComboBox cUjian) {
         try {
             query = "SELECT nama_kegiatan FROM kegiatan";
@@ -207,7 +208,13 @@ public class registrasi extends koneksi {
     }
 
     public DefaultTableModel showRegistrasi() {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Kegiatan");
         model.addColumn("Nama Kegiatan");
@@ -245,7 +252,13 @@ public class registrasi extends koneksi {
 
     //tampildata untuk button detail
     public DefaultTableModel tampilData(String idRegistrasi) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Anggota");
         model.addColumn("Nama Anggota");
@@ -276,7 +289,13 @@ public class registrasi extends koneksi {
 
     //tampildataAkhir menampilkan data peserta ketika sudah melewati tgl
     public DefaultTableModel tampilDataAkhir(String idKegiatan, JLabel lbNamaKegiatan, JLabel lbTglMulai) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Anggota");
         model.addColumn("Nama Anggota");
@@ -334,7 +353,13 @@ public class registrasi extends koneksi {
     }
 
     public DefaultTableModel filterTable(Date tglAwal, Date tglAkhir) {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Kegiatan");
         model.addColumn("Nama Kegiatan");
@@ -381,7 +406,13 @@ public class registrasi extends koneksi {
     }
     
     public DefaultTableModel tabelAnggota() {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Anggota");
         model.addColumn("Nama Anggota");
@@ -409,7 +440,13 @@ public class registrasi extends koneksi {
     }
     
     public DefaultTableModel filterTableAnggota(String namaAnggota) {
-        DefaultTableModel model = new DefaultTableModel();
+       DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("No");
         model.addColumn("ID Anggota");
         model.addColumn("Nama Anggota");

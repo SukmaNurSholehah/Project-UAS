@@ -6,14 +6,12 @@ package kelas;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
-import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -180,7 +178,13 @@ public class anggota extends koneksi {
     }
 
     public DefaultTableModel showanggota() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("NO");
         model.addColumn("ID anggota");
         model.addColumn("Nama anggota");
@@ -219,7 +223,13 @@ public class anggota extends koneksi {
     }
 
     public DefaultTableModel filterTable(String nama) {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("NO");
         model.addColumn("ID anggota");
         model.addColumn("Nama anggota");

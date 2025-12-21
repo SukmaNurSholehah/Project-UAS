@@ -124,7 +124,13 @@ public class Sabuk extends koneksi {
     }
       
        public DefaultTableModel tampil() {
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel(){
+        //nonaktif edit tabel
+         @Override
+         public boolean isCellEditable(int row, int column) {
+            return false; // tabel tidak bisa diedit
+        }
+        };
         model.addColumn("NO");
         model.addColumn("ID Sabuk");
         model.addColumn("Nama Sabuk");
@@ -210,8 +216,8 @@ public class Sabuk extends koneksi {
                 .setHorizontalAlignment(SwingConstants.CENTER);
 
         // Mengatur lebar kolom
-        tData.getColumnModel().getColumn(0).setPreferredWidth(30);  // No
-        tData.getColumnModel().getColumn(1).setPreferredWidth(100); // ID Sabuk
+        tData.getColumnModel().getColumn(0).setPreferredWidth(5);  // No
+        tData.getColumnModel().getColumn(1).setPreferredWidth(50); // ID Sabuk
         tData.getColumnModel().getColumn(2).setPreferredWidth(150); // Nama Sabuk
         tData.getColumnModel().getColumn(2).setPreferredWidth(100); // Tingkatan
 }

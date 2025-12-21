@@ -36,7 +36,7 @@ public class popUpDetailRiwayat extends javax.swing.JFrame {
         riwayatLatihan rw = new riwayatLatihan();
         DefaultTableModel model = rw.tampilDetailRiwayat(idJadwal);
         tblAbsensi.setModel(model);
-        rw.aturTable(tblAbsensi);
+        rw.aturTableDetail(tblAbsensi);
     }
 
 
