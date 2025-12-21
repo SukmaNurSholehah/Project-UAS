@@ -1,0 +1,273 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package kelas;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author This PC
+ */
+public class prestasi extends koneksi{
+
+    String ID_prestasi, peringkat, tingkat, tgl, ID_anggota;
+    private final Connection con;
+    private PreparedStatement ps;
+    private Statement st;
+    private ResultSet rs;
+    private String query;
+    public prestasi(){
+    con = super.configDB();
+    }
+    
+    public String getID_prestasi() {
+        return ID_prestasi;
+    }
+    
+    public void setID_prestasi(String ID_prestasi) {
+        this.ID_prestasi = ID_prestasi;
+    }
+    
+    public String getPeringkat() {
+        return peringkat;
+    }
+    
+    public void setPeringkat(String peringkat) {
+        this.peringkat = peringkat;
+    }
+    
+    public String getTingkat() {
+        return tingkat;
+    }
+    
+    public void setTingkat(String tingkat) {
+        this.tingkat = tingkat;
+    }
+    
+    public String getTgl() {
+        return tgl;
+    }
+    
+    public void setTgl(String tgl) {
+        this.tgl = tgl;
+    }
+    
+    public String getID_anggota() {
+        return ID_anggota;
+    }
+    
+    public void setID_anggota(String ID_anggota) {
+        this.ID_anggota = ID_anggota;
+    }
+    
+    public void tambah_prestasi() {
+        query = " INSERT INTO prestasi VALUES (?,?,?,?,?)";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, ID_prestasi);
+            ps.setString(2, peringkat);
+            ps.setString(3, tingkat);
+            ps.setString(4, tgl);
+            ps.setString(5, ID_anggota);
+            
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Ditambahkan");
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditambahkan");
+            
+        }
+        
+    }
+
+    public void ubah_prestasi() {
+        query = "UPDATE prestasi SET peringkat=?, tingkat=?, tgl=?, ID_anggota=? WHERE ID_prestasi=?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, peringkat);
+            ps.setString(2, tingkat);
+            ps.setString(3, tgl);
+            ps.setString(4, ID_anggota);
+            ps.setString(5, ID_prestasi);
+            
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Diubah");
+            
+        }
+        
+    }
+
+    public void hapus_prestasi() {
+        query = "DELETE FROM prestasi WHERE ID_prestasi = ?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, ID_prestasi);
+            
+            ps.execute();
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Dihapus");
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Dihapus");
+            
+        }
+    }
+    
+    public DefaultTableModel showprestasi() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("ID prestasi");
+        model.addColumn("Peringkat");
+        model.addColumn("Tingkat");
+        model.addColumn("Tanggal");
+        model.addColumn("Nama Anggota");
+        
+        try {
+            query = "SELECT p.ID_prestasi, p.peringkat, p.tingkat, p.tgl, a.nama_anggota "
+                    + " FROM prestasi p "
+                    + "JOIN anggota a ON p.ID_anggota = a.ID_anggota ";
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+            
+            int no = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    rs.getString("ID_prestasi"),
+                    rs.getString("peringkat"),
+                    rs.getString("tingkat"),
+                    rs.getString("tgl"),
+                    rs.getString("nama_anggota")
+                });
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan!");
+        }
+        
+        return model;
+        
+    }
+    
+    public DefaultTableModel filterTablePrestasi(String namaAnggota) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("No");
+        model.addColumn("ID prestasi");
+        model.addColumn("Peringkat");
+        model.addColumn("Tingkat");
+        model.addColumn("Tanggal");
+        model.addColumn("Nama Anggota");
+        
+        try {
+            query = "SELECT p.ID_prestasi, p.peringkat, p.tingkat, p.tgl, a.nama_anggota "
+                    + " FROM prestasi p "
+                    + "JOIN anggota a ON p.ID_anggota = a.ID_anggota "
+                    + "WHERE a.nama_anggota LIKE ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, "%" + namaAnggota + "%");
+            rs = ps.executeQuery();
+            
+            int no = 1;
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    no++,
+                    rs.getString("ID_prestasi"),
+                    rs.getString("peringkat"),
+                    rs.getString("tingkat"),
+                    rs.getString("tgl"),
+                    rs.getString("nama_anggota")
+                });
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan!");
+        }
+        
+        return model;
+        
+    }
+    
+    public void comboanggota(JComboBox canggota) {
+        try {
+            query = "SELECT nama_anggota FROM anggota";
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+            
+            while (rs.next()) {
+                canggota.addItem(rs.getString("nama_anggota"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        canggota.setSelectedItem(null);        
+    }
+    
+    public String konversID_anggota(String namaanggota) {
+        String idAnggota = "";
+        try {
+            query = "SELECT ID_anggota FROM anggota WHERE nama_anggota=?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, namaanggota);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                idAnggota = rs.getString("ID_anggota");
+            }
+            ps.close();
+        } catch (SQLException e) {
+        }
+        return idAnggota;
+    }
+    
+    public void autoID(JTextField t_idprestasi) {
+        try {
+            query = "SELECT MAX(ID_prestasi) FROM prestasi";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            String id = "PRES001";
+            if (rs.next()) {
+                String MaxID = rs.getString(1);
+                if (MaxID != null) {
+                    int num = Integer.parseInt(MaxID.substring(4));
+                    num++;
+                    id = String.format("PRES%03d", num);
+                }
+            }
+            
+            t_idprestasi.setText(id);            
+            t_idprestasi.setEditable(false);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error saat generate Id anggota");
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+    
+    
+}
