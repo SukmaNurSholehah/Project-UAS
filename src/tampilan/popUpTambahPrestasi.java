@@ -4,17 +4,79 @@
  */
 package tampilan;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import kelas.prestasi;
+import tampilan.panelPrestasi;
+
 /**
  *
- * @author Sukma Nur
+ * @author This PC
  */
 public class popUpTambahPrestasi extends javax.swing.JFrame {
 
     /**
-     * Creates new form popUpTambahPrestasi
+     * Creates new form popUp_tambahPrestasi
      */
-    public popUpTambahPrestasi() {
+    private panelPrestasi panelPrestasi;
+    
+    public popUpTambahPrestasi(panelPrestasi panelPrestasi) {
         initComponents();
+        this.panelPrestasi = panelPrestasi;
+       
+        
+        prestasi ps = new prestasi();
+        ps.autoID(t_idprestasi);
+        ps.comboanggota(cnamaanggota);
+    }
+    
+    void reset(){
+        t_idprestasi.setText(null);
+        cnamaanggota.setSelectedItem(null);
+        ctingkat.setSelectedItem(null);
+        
+    }
+    
+    public void setData(String idPrestasi, String peringkat, String tgl, String namaAnggota,String tingkat){
+        t_idprestasi.setText(idPrestasi);
+        tPeringkat.setText(peringkat);
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if(tgl != null && !tgl.isEmpty()){
+                Date date = sdf.parse(tgl);
+                tTgl.setDate(date);
+            }else{
+                tTgl.setDate(null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            tTgl.setDate(null);
+        }
+        
+        cnamaanggota.setSelectedItem(namaAnggota);
+        ctingkat.setSelectedItem(tingkat);
+    }
+    
+    String konversiID(String namaanggota){
+    String id = "";
+    try{
+    prestasi ps = new prestasi();
+    id = ps.konversID_anggota(namaanggota);
+    }catch (Exception e){
+        System.out.println(e);
+    }
+    return id;
+    }
+    
+    public void tampilanTambah(){
+        b_ubah.setVisible(false);
+        b_hapus.setVisible(false);
+    }
+    
+    public void tampilanUbah(){
+        b_simpan.setVisible(false);
+        
     }
 
     /**
@@ -28,15 +90,16 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        t_idanggota = new javax.swing.JTextField();
-        t_anggota = new javax.swing.JTextField();
-        c_tingkatan = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        t_catatan = new javax.swing.JTextArea();
+        t_idprestasi = new javax.swing.JTextField();
+        ctingkat = new javax.swing.JComboBox<>();
         b_simpan = new javax.swing.JButton();
         b_kembali = new javax.swing.JButton();
         b_ubah = new javax.swing.JButton();
         b_hapus = new javax.swing.JButton();
+        cnamaanggota = new javax.swing.JComboBox<>();
+        tPeringkat = new javax.swing.JTextField();
+        tTgl = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -46,37 +109,58 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("EDIT DATA PRESTASI ");
 
-        t_idanggota.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Anggota"));
+        t_idprestasi.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        t_anggota.setBorder(javax.swing.BorderFactory.createTitledBorder("Nama Anggota"));
-
-        c_tingkatan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kecamatan", "Kabupaten", "Provinsi" }));
-        c_tingkatan.setBorder(javax.swing.BorderFactory.createTitledBorder("Tingkat"));
-
-        t_catatan.setColumns(20);
-        t_catatan.setRows(5);
-        t_catatan.setBorder(javax.swing.BorderFactory.createTitledBorder("Catatan"));
-        jScrollPane1.setViewportView(t_catatan);
+        ctingkat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kecamatan", "Kabupaten", "Provinsi", "Nasional", "Internasional" }));
+        ctingkat.setBorder(javax.swing.BorderFactory.createTitledBorder("Tingkat"));
 
         b_simpan.setBackground(new java.awt.Color(0, 0, 255));
         b_simpan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         b_simpan.setForeground(new java.awt.Color(255, 255, 255));
         b_simpan.setText("Simpan");
+        b_simpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_simpanActionPerformed(evt);
+            }
+        });
 
         b_kembali.setBackground(new java.awt.Color(0, 255, 102));
         b_kembali.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         b_kembali.setForeground(new java.awt.Color(255, 255, 255));
         b_kembali.setText("Kembali");
+        b_kembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_kembaliActionPerformed(evt);
+            }
+        });
 
         b_ubah.setBackground(new java.awt.Color(255, 204, 0));
         b_ubah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         b_ubah.setForeground(new java.awt.Color(255, 255, 255));
         b_ubah.setText("Ubah");
+        b_ubah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_ubahActionPerformed(evt);
+            }
+        });
 
         b_hapus.setBackground(new java.awt.Color(255, 51, 0));
         b_hapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         b_hapus.setForeground(new java.awt.Color(255, 255, 255));
         b_hapus.setText("Hapus");
+        b_hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_hapusActionPerformed(evt);
+            }
+        });
+
+        cnamaanggota.setBorder(javax.swing.BorderFactory.createTitledBorder("Nama Anggota"));
+
+        tPeringkat.setBorder(javax.swing.BorderFactory.createTitledBorder("Peringkat"));
+
+        tTgl.setBorder(javax.swing.BorderFactory.createTitledBorder("Tanggal Peroleh"));
+
+        jLabel2.setText("ID Prestasi");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -85,48 +169,60 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(t_idanggota)
-                                .addComponent(t_anggota)
-                                .addComponent(c_tingkatan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(b_simpan)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_ubah)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_kembali)))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(t_idprestasi, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(tPeringkat, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addGap(159, 159, 159)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(b_simpan)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(b_kembali))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(b_ubah)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(b_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(ctingkat, javax.swing.GroupLayout.Alignment.LEADING, 0, 324, Short.MAX_VALUE)
+                                .addComponent(cnamaanggota, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tTgl, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(76, 76, 76)
-                .addComponent(t_idanggota, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(t_anggota, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(c_tingkatan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(t_idprestasi, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tPeringkat, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tTgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
+                .addComponent(cnamaanggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ctingkat, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_simpan)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(b_kembali)
-                        .addComponent(b_ubah)
-                        .addComponent(b_hapus)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(b_kembali))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(b_ubah)
+                    .addComponent(b_hapus))
+                .addGap(137, 137, 137))
         );
+
+        t_idprestasi.getAccessibleContext().setAccessibleName("ID prestasi\n");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,6 +238,73 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void b_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_simpanActionPerformed
+        // TODO add your handling code here:
+        prestasi pres = new prestasi();
+        pres.setID_prestasi(t_idprestasi.getText());
+        pres.setPeringkat(tPeringkat.getText());
+        pres.setTingkat(ctingkat.getSelectedItem().toString());
+       
+        //ambil tgl
+        Date tgl = tTgl.getDate();
+        String tanggal = null;
+        if(tgl !=null){
+            tanggal = new SimpleDateFormat("yyyy-MM-dd").format(tgl);
+        }
+        pres.setTgl(tanggal);
+        pres.setID_anggota(konversiID(cnamaanggota.getSelectedItem().toString()));
+        
+        pres.tambah_prestasi();
+        
+        if(panelPrestasi != null){
+           panelPrestasi.load_table_prestasi();
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_b_simpanActionPerformed
+
+    private void b_ubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_ubahActionPerformed
+        // TODO add your handling code here:
+         prestasi pres = new prestasi();
+        pres.setID_prestasi(t_idprestasi.getText());
+        pres.setPeringkat(tPeringkat.getText());
+        pres.setTingkat(ctingkat.getSelectedItem().toString());
+       
+        //ambil tgl
+        Date tgl = tTgl.getDate();
+        String tanggal = null;
+        if(tgl !=null){
+            tanggal = new SimpleDateFormat("yyyy-MM-dd").format(tgl);
+        }
+        pres.setTgl(tanggal);
+        pres.setID_anggota(konversiID(cnamaanggota.getSelectedItem().toString()));
+        
+        pres.ubah_prestasi();
+        if(panelPrestasi != null){
+            panelPrestasi.load_table_prestasi();
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_b_ubahActionPerformed
+
+    private void b_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_hapusActionPerformed
+        // TODO add your handling code here:
+         prestasi pres = new prestasi();
+        pres.setID_prestasi(t_idprestasi.getText());
+        
+        pres.hapus_prestasi();
+        if(panelPrestasi != null){
+            panelPrestasi.load_table_prestasi();
+        }
+        reset();
+        dispose();
+    }//GEN-LAST:event_b_hapusActionPerformed
+
+    private void b_kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_kembaliActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_b_kembaliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,16 +332,37 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(popUpTambahPrestasi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUp_tambahPrestasi().setVisible(true);
+//            }
+//        });
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new popUpTambahPrestasi().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUp_tambahPrestasi().setVisible(true);
+//            }
+//        });
+        //</editor-fold>
+
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUp_tambahPrestasi().setVisible(true);
+//            }
+//        });
+        //</editor-fold>
+
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new popUp_tambahPrestasi().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -186,12 +370,13 @@ public class popUpTambahPrestasi extends javax.swing.JFrame {
     private javax.swing.JButton b_kembali;
     private javax.swing.JButton b_simpan;
     private javax.swing.JButton b_ubah;
-    private javax.swing.JComboBox<String> c_tingkatan;
+    private javax.swing.JComboBox<String> cnamaanggota;
+    private javax.swing.JComboBox<String> ctingkat;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField t_anggota;
-    private javax.swing.JTextArea t_catatan;
-    private javax.swing.JTextField t_idanggota;
+    private javax.swing.JTextField tPeringkat;
+    private com.toedter.calendar.JDateChooser tTgl;
+    private javax.swing.JTextField t_idprestasi;
     // End of variables declaration//GEN-END:variables
 }
