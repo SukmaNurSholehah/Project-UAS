@@ -204,8 +204,8 @@ public class pelatih extends koneksi {
     public void autoID(JTextField tIdPelatih) {
         try {
             query = "SELECT MAX(ID_pelatih) FROM pelatih";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
+             st = con.createStatement();
+             rs = st.executeQuery(query);
 
             String id = "PLT001"; //default awal
             if (rs.next()) {

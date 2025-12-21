@@ -101,6 +101,7 @@ public class ujian extends koneksi {
             JOptionPane.showMessageDialog(null, "Data Berhasil Ditambahkan ");
         } catch (SQLException e) {
             System.out.println(e);
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Data Gagal Ditambahkan ");
         }
     }

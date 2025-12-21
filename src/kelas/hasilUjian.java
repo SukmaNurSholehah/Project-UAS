@@ -89,6 +89,7 @@ public class hasilUjian extends koneksi {
             }
         } catch (SQLException e) {
             System.out.println(e);
+            
         }
         return model;
     }

@@ -66,6 +66,7 @@ public class mainFrame extends javax.swing.JFrame {
         bLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         mainPanel.setBackground(new java.awt.Color(140, 22, 22));
         mainPanel.setPreferredSize(new java.awt.Dimension(1250, 700));
