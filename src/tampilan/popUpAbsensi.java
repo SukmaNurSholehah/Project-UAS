@@ -4,6 +4,10 @@
  */
 package tampilan;
 
+import kelas.clasAbsensiLatihan;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Sukma Nur
@@ -15,6 +19,21 @@ public class popUpAbsensi extends javax.swing.JFrame {
      */
     public popUpAbsensi() {
         initComponents();
+        load_table();
+
+        clasAbsensiLatihan absen = new clasAbsensiLatihan();
+        absen.autoID(lbID);
+    }
+
+    public void tampilData(String tanggal, String lokasi) {
+        lTanggal.setText(tanggal);
+        lLokasi.setText(lokasi);
+    }
+
+    public void load_table() {
+        clasAbsensiLatihan absen = new clasAbsensiLatihan();
+        DefaultTableModel model = absen.showPeserta();
+        tAbsen.setModel(model);
     }
 
     /**
@@ -34,11 +53,11 @@ public class popUpAbsensi extends javax.swing.JFrame {
         lLokasi = new javax.swing.JLabel();
         tCariNamaSiswa = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tAbsen = new javax.swing.JTable();
         bSimpan = new javax.swing.JButton();
         bKembali = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        lTanggal1 = new javax.swing.JLabel();
+        lbID = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -58,29 +77,31 @@ public class popUpAbsensi extends javax.swing.JFrame {
 
         tCariNamaSiswa.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Nama Siswa"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tAbsen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tAbsen);
 
         bSimpan.setBackground(new java.awt.Color(51, 51, 255));
         bSimpan.setText("Simpan");
+        bSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSimpanActionPerformed(evt);
+            }
+        });
 
         bKembali.setBackground(new java.awt.Color(255, 32, 26));
         bKembali.setText("Kembali");
@@ -92,40 +113,39 @@ public class popUpAbsensi extends javax.swing.JFrame {
 
         jLabel4.setText("Tanggal        :");
 
-        lTanggal1.setText(".....");
+        lbID.setText(".....");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 277, Short.MAX_VALUE)
-                        .addComponent(bSimpan)
-                        .addGap(31, 31, 31)
-                        .addComponent(bKembali))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(45, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tCariNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lTanggal1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lLokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(149, 149, 149)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(tCariNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGap(229, 229, 229)
+                            .addComponent(bSimpan)
+                            .addGap(18, 18, 18)
+                            .addComponent(bKembali)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbID, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lLokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,7 +155,7 @@ public class popUpAbsensi extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(lTanggal1))
+                    .addComponent(lbID))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -144,15 +164,15 @@ public class popUpAbsensi extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(lLokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(26, 26, 26)
                 .addComponent(tCariNamaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bSimpan)
-                    .addComponent(bKembali))
-                .addGap(26, 26, 26))
+                    .addComponent(bKembali)
+                    .addComponent(bSimpan))
+                .addGap(76, 76, 76))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,7 +183,7 @@ public class popUpAbsensi extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -171,8 +191,45 @@ public class popUpAbsensi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bKembaliActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_bKembaliActionPerformed
+
+    private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
+        clasAbsensiLatihan absen = new clasAbsensiLatihan();
+        absen.setIdAbsensiLatihan(lbID.getText());
+
+        //untuk mendapatkan idJadwal dari konversi lokasi latihan 
+        String idJadwal = absen.getIDJadwalLatihan(lLokasi.getText());
+        absen.setTgl(lTanggal.getText());
+
+        boolean status = true; //penanda apakah data berhasil disimpan atau tidak
+        // Loop peserta
+        for (int i = 0; i < tAbsen.getRowCount(); i++) {
+
+            Boolean hadirValue = (Boolean) tAbsen.getValueAt(i, 4);
+
+            // Jika checkbox belum pernah disentuh nilainya bisa null
+            int hadir = (hadirValue != null && hadirValue) ? 1 : 0;
+
+            String idPeserta = tAbsen.getValueAt(i, 1).toString();
+
+            absen.setIdJadwalLatihan(idJadwal);
+            absen.setIdAnggota(idPeserta);
+            absen.setKehadiran(hadir);
+
+            boolean sukses = absen.simpanAbsensi();
+
+            if (!sukses) {
+                status = false; //jika tidak sukses menyimpan berarti status false
+            }
+        }
+        if (status) {
+            JOptionPane.showMessageDialog(null, "Absensi Berhasil Disimpan");
+        } else {
+            JOptionPane.showMessageDialog(null, "Absensi Berhasil Disimpan");
+        }
+        dispose();
+    }//GEN-LAST:event_bSimpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,10 +278,10 @@ public class popUpAbsensi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lLokasi;
     private javax.swing.JLabel lTanggal;
-    private javax.swing.JLabel lTanggal1;
+    private javax.swing.JLabel lbID;
+    private javax.swing.JTable tAbsen;
     private javax.swing.JTextField tCariNamaSiswa;
     // End of variables declaration//GEN-END:variables
 }
