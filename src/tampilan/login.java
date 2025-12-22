@@ -47,7 +47,7 @@ public class login extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(140, 22, 22));
-        jLabel2.setText("AMP PORSIGAL");
+        jLabel2.setText("PORSIGALApp");
 
         tUsername.setBackground(new java.awt.Color(140, 22, 22));
         tUsername.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

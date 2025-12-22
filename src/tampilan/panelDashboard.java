@@ -26,7 +26,7 @@ public class panelDashboard extends javax.swing.JPanel {
 } 
      private void tampilkanDiagram() {
         diagramDashboard diag = new diagramDashboard();
-        ChartPanel p = diag.getDiagramPanel();
+        ChartPanel p = diag.getDiagramBulanan();
 
         p.setSize(pnDiagramKehadiran.getWidth(), pnDiagramKehadiran.getHeight());
 
