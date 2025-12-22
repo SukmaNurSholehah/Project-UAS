@@ -82,7 +82,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PNG/logo_porsigal_37x37-removebg-preview.png"))); // NOI18N
-        jLabel1.setText(" AMPOR");
+        jLabel1.setText(" PORSIGALApp");
 
         sidebar.setBackground(new java.awt.Color(140, 22, 22));
         sidebar.setPreferredSize(new java.awt.Dimension(300, 645));

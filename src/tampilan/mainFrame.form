@@ -125,7 +125,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/PNG/logo_porsigal_37x37-removebg-preview.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value=" AMPOR"/>
+                <Property name="text" type="java.lang.String" value=" PORSIGALApp"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="sidebar">
