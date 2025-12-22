@@ -85,7 +85,6 @@ public class panelSabuk extends javax.swing.JPanel {
             }
         });
 
-        cTingkat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PRAPTA", "KAWI", "GLADHI", "WIRA", "MANGGALA", "PURUSA" }));
         cTingkat.setPreferredSize(new java.awt.Dimension(72, 35));
 
         bSimpan.setText("Simpan");
