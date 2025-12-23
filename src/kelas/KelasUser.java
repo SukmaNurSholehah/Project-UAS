@@ -160,12 +160,12 @@ public class KelasUser extends koneksi {
     
     public boolean login(String username, String password) {
     try {
-        String sql = "SELECT * FROM user WHERE username=? AND password=MD5(?)";
+        query = "SELECT * FROM user WHERE username=? AND password=MD5(?)";
         
         koneksi k = new koneksi();
-        Connection con = k.configDB(); // ⬅ BENAR
+        Connection con = k.configDB(); 
 
-        PreparedStatement ps = con.prepareStatement(sql);
+        PreparedStatement ps = con.prepareStatement(query);
         ps.setString(1, username);
         ps.setString(2, password);
         ResultSet rs = ps.executeQuery();
